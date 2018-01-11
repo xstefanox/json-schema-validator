@@ -1,6 +1,8 @@
-import io.github.xstefanox.json.schema.validator.JsonSchema
+package io.github.xstefanox.json.schema.validator
+
+import TestUtils.Companion.OBJECT_MAPPER
+import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.xstefanox.json.schema.validator.JsonSchemaType.NUMBER
-import io.github.xstefanox.json.schema.validator.OBJECT_MAPPER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName
@@ -15,48 +17,32 @@ class JsonSchemaTest {
 
         val description = "TEST_DESCRIPTION"
 
-        val jsonNode = OBJECT_MAPPER.readTree("""
+        val jsonNode = OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "description": "$description",
                 "type": "boolean"
             }
-            """)
+            """, ObjectNode::class.java)
 
-        val jsonSchema = JsonSchema(jsonNode)
+        val jsonSchema = ObjectNodeJsonSchema(jsonNode)
 
         assertThat(jsonSchema.description)
                 .isEqualTo(description)
     }
 
     @Test
-    @DisplayName("array node should be rejected")
-    internal fun test2() {
-        assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("[]"))
-        })
-    }
-
-    @Test
-    @DisplayName("null node should be rejected")
-    internal fun test3() {
-        assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("null"))
-        })
-    }
-
-    @Test
     @DisplayName("missing description should be null")
     internal fun test4() {
 
-        val jsonNode = OBJECT_MAPPER.readTree("""
+        val jsonNode = OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": "boolean"
             }
-            """)
+            """, ObjectNode::class.java)
 
-        val jsonSchema = JsonSchema(jsonNode)
+        val jsonSchema = ObjectNodeJsonSchema(jsonNode)
 
         assertThat(jsonSchema.description)
                 .isNull()
@@ -66,15 +52,15 @@ class JsonSchemaTest {
     @DisplayName("null description should be null")
     internal fun test5() {
 
-        val jsonNode = OBJECT_MAPPER.readTree("""
+        val jsonNode = OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "description": null,
                 "type": "boolean"
             }
-            """)
+            """, ObjectNode::class.java)
 
-        val jsonSchema = JsonSchema(jsonNode)
+        val jsonSchema = ObjectNodeJsonSchema(jsonNode)
 
         assertThat(jsonSchema.description)
                 .isNull()
@@ -85,12 +71,12 @@ class JsonSchemaTest {
     internal fun test6() {
 
         assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("""
+            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": null
             }
-            """))
+            """, ObjectNode::class.java))
         })
     }
 
@@ -99,12 +85,12 @@ class JsonSchemaTest {
     internal fun test7() {
 
         assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("""
+            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": "TEST"
             }
-            """))
+            """, ObjectNode::class.java))
         })
     }
 
@@ -114,12 +100,12 @@ class JsonSchemaTest {
 
         val type = "number"
 
-        val jsonSchema = JsonSchema(OBJECT_MAPPER.readTree("""
+        val jsonSchema = ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": "$type"
             }
-            """))
+            """, ObjectNode::class.java))
 
         assertThat(jsonSchema.type).isEqualTo(NUMBER)
     }
@@ -129,12 +115,12 @@ class JsonSchemaTest {
     internal fun test9() {
 
         assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("""
+            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": "BOOLEAN"
             }
-            """))
+            """, ObjectNode::class.java))
         })
     }
 
@@ -143,12 +129,12 @@ class JsonSchemaTest {
     internal fun test10() {
 
         assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("""
+            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": null,
                 "type": "boolean"
             }
-            """))
+            """, ObjectNode::class.java))
         })
     }
 
@@ -157,11 +143,11 @@ class JsonSchemaTest {
     internal fun test11() {
 
         assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("""
+            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "type": "boolean"
             }
-            """))
+            """, ObjectNode::class.java))
         })
     }
 
@@ -170,12 +156,12 @@ class JsonSchemaTest {
     internal fun test12() {
 
         assertThrows(IllegalArgumentException::class.java, {
-            JsonSchema(OBJECT_MAPPER.readTree("""
+            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "THIS IS NOT A VALID URI",
                 "type": "boolean"
             }
-            """))
+            """, ObjectNode::class.java))
         })
     }
 
@@ -185,12 +171,12 @@ class JsonSchemaTest {
 
         val schemaUri = URI.create("http://example.org/a/valid/path")
 
-        val jsonSchema = JsonSchema(OBJECT_MAPPER.readTree("""
+        val jsonSchema = ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": "boolean"
             }
-            """))
+            """, ObjectNode::class.java))
 
         assertThat(jsonSchema.schema).isEqualTo(schemaUri)
     }
