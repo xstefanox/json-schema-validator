@@ -17,6 +17,10 @@ class JsonValidator {
             return false
         }
 
+        if (jsonSchema is ObjectNodeJsonSchema && jsonSchema.type == null) {
+            return true
+        }
+
         return false
     }
 }

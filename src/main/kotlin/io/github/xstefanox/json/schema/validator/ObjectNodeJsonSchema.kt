@@ -17,15 +17,33 @@ class ObjectNodeJsonSchema(json: ObjectNode) : JsonSchema() {
 
         @JvmField
         val TYPE_POINTER: JsonPointer = JsonPointer.compile("/type")
+
+        @JvmField
+        val DEFAULT_SCHEMA_URI = URI.create("http://json-schema.org/schema#")!!
     }
 
     val schema: URI
     val description: String?
-    val type: JsonSchemaType
+    val type: JsonSchemaType?
 
     init {
-        this.schema = URI.create((json.at(SCHEMA_POINTER) as? TextNode ?: throw IllegalArgumentException("\$schema must be a string")).asText())
+
+        val schema = json.at(SCHEMA_POINTER)
+
+        if (schema is TextNode) {
+            this.schema = URI.create(schema.asText())
+        } else {
+            this.schema = DEFAULT_SCHEMA_URI
+        }
+
         this.description = (json.at(DESCRIPTION_POINTER) as? TextNode)?.asText()
-        this.type = JsonSchemaType.fromJsonSchemaString((json.at(TYPE_POINTER) as? TextNode ?: throw IllegalArgumentException("type must be a string")).asText())
+
+        val type = json.at(TYPE_POINTER)
+
+        if (type is TextNode) {
+            this.type = JsonSchemaType.fromJsonSchemaString(type.asText())
+        } else {
+            this.type = null
+        }
     }
 }

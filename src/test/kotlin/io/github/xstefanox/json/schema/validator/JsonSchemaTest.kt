@@ -67,17 +67,20 @@ class JsonSchemaTest {
     }
 
     @Test
-    @DisplayName("null type should be rejected")
+    @DisplayName("null type should be accepted as null")
     internal fun test6() {
 
-        assertThrows(IllegalArgumentException::class.java, {
-            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
+        val jsonNode = OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": "http://example.org/a/valid/path",
                 "type": null
             }
-            """, ObjectNode::class.java))
-        })
+            """, ObjectNode::class.java)
+
+        val jsonSchema = ObjectNodeJsonSchema(jsonNode)
+
+        assertThat(jsonSchema.type)
+                .isNull()
     }
 
     @Test
@@ -125,30 +128,28 @@ class JsonSchemaTest {
     }
 
     @Test
-    @DisplayName("null \$schema should be rejected")
+    @DisplayName("null \$schema should be converted to default")
     internal fun test10() {
 
-        assertThrows(IllegalArgumentException::class.java, {
-            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
+        assertThat(ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "${'$'}schema": null,
                 "type": "boolean"
             }
-            """, ObjectNode::class.java))
-        })
+            """, ObjectNode::class.java)).schema)
+                .isEqualTo(ObjectNodeJsonSchema.DEFAULT_SCHEMA_URI)
     }
 
     @Test
-    @DisplayName("missing \$schema should be rejected")
+    @DisplayName("missing \$schema should be converted to default")
     internal fun test11() {
 
-        assertThrows(IllegalArgumentException::class.java, {
-            ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
+        assertThat(ObjectNodeJsonSchema(OBJECT_MAPPER.readValue("""
             {
                 "type": "boolean"
             }
-            """, ObjectNode::class.java))
-        })
+            """, ObjectNode::class.java)).schema)
+                .isEqualTo(ObjectNodeJsonSchema.DEFAULT_SCHEMA_URI)
     }
 
     @Test
