@@ -1,6 +1,5 @@
 package io.github.xstefanox.json.schema.validator.node
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -16,5 +15,4 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME
     Type(value = ObjectJsonSchemaNode::class, name = "object"),
     Type(value = ArrayJsonSchemaNode::class, name = "array")
 ])
-@JsonIgnoreProperties(value = ["\$schema"])
 abstract class JsonSchemaNode

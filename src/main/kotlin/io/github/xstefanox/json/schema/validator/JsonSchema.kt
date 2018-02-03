@@ -1,13 +1,19 @@
 package io.github.xstefanox.json.schema.validator
 
-abstract class JsonSchema {
+import com.fasterxml.jackson.core.JsonPointer
+import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
+import java.net.URI
+
+class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
     companion object {
 
-        /**
-         * The Media Type for a JSON Schema as defined in [rfc6838](https://tools.ietf.org/html/rfc6838).
-         */
         @JvmField
-        val MEDIA_TYPE = "application/schema+json"
+        val SCHEMA_POINTER: JsonPointer = JsonPointer.compile("/\$schema")
+
+        const val SCHEMA_FIELD = "\$schema"
+
+        @JvmField
+        val DEFAULT_SCHEMA_URI = URI.create("http://json-schema.org/schema#")!!
     }
 }
