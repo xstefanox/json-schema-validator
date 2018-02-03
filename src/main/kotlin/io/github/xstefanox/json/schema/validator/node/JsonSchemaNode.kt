@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME
 
 @JsonTypeInfo(use = NAME, property = "type")
 @JsonSubTypes(value = [
-    Type(value = IntegerJsonSchemaNode::class, name = "integer")
+    Type(value = IntegerJsonSchemaNode::class, name = "integer"),
+    Type(value = NumberJsonSchemaNode::class, name = "number")
 ])
 @JsonIgnoreProperties(value = ["\$schema"])
 abstract class JsonSchemaNode
