@@ -1,11 +1,12 @@
 package io.github.xstefanox.json.schema.validator.node
 
+import io.github.xstefanox.json.schema.validator.model.ESRegex
 import io.github.xstefanox.json.schema.validator.model.PositiveInt
 
 data class StringJsonSchemaNode(
         val minLength: PositiveInt = PositiveInt(0),
         val maxLength: PositiveInt? = null,
-        val pattern: Regex? = null,
+        val pattern: ESRegex? = null,
         val format: StringFormat? = null
 ) : JsonSchemaNode() {
 
