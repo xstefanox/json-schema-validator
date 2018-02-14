@@ -65,4 +65,16 @@ internal class MultiplierTest {
     internal fun test8() {
         assertThat(Multiplier(1).toString()).isEqualTo("1")
     }
+
+    @Test
+    @DisplayName("a multiplier should divide its multiples")
+    internal fun test9() {
+        assertThat(Multiplier(2).divides(4)).isTrue()
+    }
+
+    @Test
+    @DisplayName("a multiplier should not divide a number which is not one of its multiplesmultiples")
+    internal fun test10() {
+        assertThat(Multiplier(2).divides(5)).isFalse()
+    }
 }

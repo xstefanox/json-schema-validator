@@ -37,8 +37,31 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             }
 
             is IntegerJsonSchemaNode -> {
+
                 if (json !is IntNode && json !is BigIntegerNode && json !is ShortNode && json !is LongNode) {
                     errors.add("expected an integer, found ${json::class}")
+                }
+
+                val intValue = json.asInt()
+
+                if (root.multipleOf != null && !root.multipleOf.divides(intValue)) {
+                    errors.add("$intValue is not a multiple of ${root.multipleOf}")
+                }
+
+                if (root.minimum != null) {
+                    if (root.exclusiveMinimum && intValue <= root.minimum) {
+                        errors.add("$intValue is lesser than lower bound")
+                    } else if (intValue < root.minimum) {
+                        errors.add("$intValue is lesser than lower bound")
+                    }
+                }
+
+                if (root.maximum != null) {
+                    if (root.exclusiveMaximum && intValue >= root.maximum) {
+                        errors.add("$intValue is greater than upper bound")
+                    } else if (intValue > root.maximum) {
+                        errors.add("$intValue is greater than upper bound")
+                    }
                 }
             }
         }

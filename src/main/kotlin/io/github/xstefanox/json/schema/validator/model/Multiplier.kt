@@ -20,6 +20,10 @@ data class Multiplier(private val value: Number) : Comparable<Multiplier> {
         return value
     }
 
+    fun divides(num: Int): Boolean {
+        return num.rem(value.toDouble()) == 0.0
+    }
+
     override fun hashCode(): Int {
         return value.hashCode()
     }
