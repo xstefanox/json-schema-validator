@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.node.BigIntegerNode
 import com.fasterxml.jackson.databind.node.BooleanNode
 import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.LongNode
+import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ShortNode
 import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import java.net.URI
 
 class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
@@ -30,6 +32,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         val errors = mutableListOf<String>()
 
         when (root) {
+
             is BooleanJsonSchemaNode -> {
                 if (json !is BooleanNode) {
                     errors.add("expected a ${BooleanNode::class}, found ${json::class}")
@@ -64,6 +67,14 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                     }
                 }
             }
+
+            is NullJsonSchemaNode -> {
+                if (json !is NullNode) {
+                    errors.add("expected a null, found ${json::class}")
+                }
+            }
+
+            else -> throw AssertionError("unsupported JSON Schema type")
         }
 
         return ValidationResult(errors)
