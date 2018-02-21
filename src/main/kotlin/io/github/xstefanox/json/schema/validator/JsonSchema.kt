@@ -2,6 +2,7 @@ package io.github.xstefanox.json.schema.validator
 
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.BigIntegerNode
 import com.fasterxml.jackson.databind.node.BooleanNode
 import com.fasterxml.jackson.databind.node.DecimalNode
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.node.LongNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ShortNode
 import com.fasterxml.jackson.databind.node.TextNode
+import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
@@ -34,42 +36,48 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
     }
 
     fun validate(json: JsonNode): ValidationResult {
+        return ValidationResult(validate(root, json))
+    }
+
+    private fun validate(schema: JsonSchemaNode, json: JsonNode): List<String> {
 
         val errors = mutableListOf<String>()
 
-        when (root) {
+        when (schema) {
 
             is BooleanJsonSchemaNode -> {
+                
                 if (json !is BooleanNode) {
-                    errors.add("expected a ${BooleanNode::class}, found ${json::class}")
+                    errors += "expected a ${BooleanNode::class}, found ${json::class}"
                 }
+                
             }
 
             is IntegerJsonSchemaNode -> {
 
                 if (json !is IntNode && json !is BigIntegerNode && json !is ShortNode && json !is LongNode) {
-                    errors.add("expected an integer, found ${json::class}")
+                    errors += "expected an integer, found ${json::class}"
                 }
 
                 val intValue = json.asInt()
 
-                if (root.multipleOf != null && !root.multipleOf.divides(intValue)) {
-                    errors.add("$intValue is not a multiple of ${root.multipleOf}")
+                if (schema.multipleOf != null && !schema.multipleOf.divides(intValue)) {
+                    errors += "$intValue is not a multiple of ${schema.multipleOf}"
                 }
 
-                if (root.minimum != null) {
-                    if (root.exclusiveMinimum && intValue <= root.minimum) {
-                        errors.add("$intValue is lesser than lower bound")
-                    } else if (intValue < root.minimum) {
-                        errors.add("$intValue is lesser than lower bound")
+                if (schema.minimum != null) {
+                    if (schema.exclusiveMinimum && intValue <= schema.minimum) {
+                        errors += "$intValue is lesser than lower bound"
+                    } else if (intValue < schema.minimum) {
+                        errors += "$intValue is lesser than lower bound"
                     }
                 }
 
-                if (root.maximum != null) {
-                    if (root.exclusiveMaximum && intValue >= root.maximum) {
-                        errors.add("$intValue is greater than upper bound")
-                    } else if (intValue > root.maximum) {
-                        errors.add("$intValue is greater than upper bound")
+                if (schema.maximum != null) {
+                    if (schema.exclusiveMaximum && intValue >= schema.maximum) {
+                        errors += "$intValue is greater than upper bound"
+                    } else if (intValue > schema.maximum) {
+                        errors += "$intValue is greater than upper bound"
                     }
                 }
             }
@@ -77,28 +85,28 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is NumberJsonSchemaNode -> {
 
                 if (json !is DoubleNode && json !is FloatNode && json !is DecimalNode) {
-                    errors.add("expected a number, found ${json::class}")
+                    errors += "expected a number, found ${json::class}"
                 } else {
 
                     val doubleValue = json.asDouble()
 
-                    if (root.multipleOf != null && !root.multipleOf.divides(doubleValue)) {
-                        errors.add("$doubleValue is not a multiple of ${root.multipleOf}")
+                    if (schema.multipleOf != null && !schema.multipleOf.divides(doubleValue)) {
+                        errors += "$doubleValue is not a multiple of ${schema.multipleOf}"
                     }
 
-                    if (root.minimum != null) {
-                        if (root.exclusiveMinimum && doubleValue <= root.minimum.toDouble()) {
-                            errors.add("$doubleValue is lesser than lower bound")
-                        } else if (doubleValue < root.minimum.toDouble()) {
-                            errors.add("$doubleValue is lesser than lower bound")
+                    if (schema.minimum != null) {
+                        if (schema.exclusiveMinimum && doubleValue <= schema.minimum.toDouble()) {
+                            errors += "$doubleValue is lesser than lower bound"
+                        } else if (doubleValue < schema.minimum.toDouble()) {
+                            errors += "$doubleValue is lesser than lower bound"
                         }
                     }
 
-                    if (root.maximum != null) {
-                        if (root.exclusiveMaximum && doubleValue >= root.maximum.toDouble()) {
-                            errors.add("$doubleValue is greater than upper bound")
-                        } else if (doubleValue > root.maximum.toDouble()) {
-                            errors.add("$doubleValue is greater than upper bound")
+                    if (schema.maximum != null) {
+                        if (schema.exclusiveMaximum && doubleValue >= schema.maximum.toDouble()) {
+                            errors += "$doubleValue is greater than upper bound"
+                        } else if (doubleValue > schema.maximum.toDouble()) {
+                            errors += "$doubleValue is greater than upper bound"
                         }
                     }
                 }
@@ -106,34 +114,60 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
             is NullJsonSchemaNode -> {
                 if (json !is NullNode) {
-                    errors.add("expected a null, found ${json::class}")
+                    errors += "expected a null, found ${json::class}"
                 }
             }
 
             is StringJsonSchemaNode -> {
 
                 if (json !is TextNode) {
-                    errors.add("expected a string, found ${json::class}")
+                    errors += "expected a string, found ${json::class}"
                 }
 
                 val textValue = json.asText()
 
-                if (root.minLength > textValue.length) {
-                    errors.add("minimum length is ${root.minLength}, found ${textValue.length}")
+                if (schema.minLength > textValue.length) {
+                    errors += "minimum length is ${schema.minLength}, found ${textValue.length}"
                 }
 
-                if (root.maxLength != null && root.maxLength < textValue.length) {
-                    errors.add("maximum length is ${root.maxLength}, found ${textValue.length}")
+                if (schema.maxLength != null && schema.maxLength < textValue.length) {
+                    errors += "maximum length is ${schema.maxLength}, found ${textValue.length}"
                 }
 
-                if (root.pattern != null && !root.pattern.matches(textValue)) {
-                    errors.add("string  does not match pattern")
+                if (schema.pattern != null && !schema.pattern.matches(textValue)) {
+                    errors += "string  does not match pattern"
                 }
             }
 
-            else -> throw AssertionError("unsupported JSON Schema type")
+            is ArrayJsonSchemaNode -> {
+
+                if (json !is ArrayNode) {
+                    errors += "expected an array, found ${json::class}"
+                } else {
+
+                    if (schema.minItems > json.size()) {
+                        errors += "minimum number of items is ${schema.minItems}, found ${json.size()}"
+                    }
+
+                    if (schema.maxItems != null && schema.maxItems < json.size()) {
+                        errors += "minimum number of items is ${schema.maxItems}, found ${json.size()}"
+                    }
+
+                    if (schema.uniqueItems && json.toList().size != json.toSet().size) {
+                        errors += "duplicated elements found"
+                    }
+
+                    if (schema.items != null) {
+                        for (jsonNode in json) {
+                            errors += validate(schema.items, jsonNode)
+                        }
+                    }
+                }
+            }
+
+            else -> throw AssertionError("unsupported JSON Schema type ${schema::class}")
         }
 
-        return ValidationResult(errors)
+        return errors
     }
 }
