@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.node.FloatNode
 import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.LongNode
 import com.fasterxml.jackson.databind.node.NullNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ShortNode
 import com.fasterxml.jackson.databind.node.TextNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
@@ -19,6 +20,7 @@ import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import java.net.URI
 
@@ -164,6 +166,51 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                             errors += validate(schema.items, jsonNode)
                         }
                     }
+                }
+            }
+
+            is ObjectJsonSchemaNode -> {
+
+                if (json !is ObjectNode) {
+                    errors += "expected an object, found ${json::class}"
+                } else {
+
+                    val jsonPropertyNames = json.fieldNames()
+                            .asSequence()
+                            .map { ObjectJsonSchemaNode.Property(it) }
+                            .toSet()
+
+                    if (schema.properties != null) {
+
+                        for (field in json.fields()) {
+
+                            val property = ObjectJsonSchemaNode.Property(field.key)
+                            val propertyJsonSchemaNode = schema.properties[property]
+
+                            if (propertyJsonSchemaNode != null) {
+                                errors += validate(propertyJsonSchemaNode, field.value)
+                            }
+                        }
+
+                        if (!schema.additionalProperties) {
+
+                            jsonPropertyNames
+                                    .filter { it !in schema.properties.keys }
+                                    .forEach { errors += "additional property $it not allowed" }
+                        }
+                    }
+
+                    if (schema.minProperties > jsonPropertyNames.size) {
+                        errors += "expected at least ${schema.minProperties}, found ${jsonPropertyNames.size}"
+                    }
+
+                    if (schema.maxProperties != null && schema.maxProperties < jsonPropertyNames.size) {
+                        errors += "expected at most ${schema.maxProperties}, found ${jsonPropertyNames.size}"
+                    }
+
+                    schema.required
+                            .filter { it !in jsonPropertyNames }
+                            .forEach { errors += "missing required property $it" }
                 }
             }
 
