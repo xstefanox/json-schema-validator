@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.LongNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ShortNode
+import com.fasterxml.jackson.databind.node.TextNode
 import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import java.net.URI
 
 class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
@@ -71,6 +73,27 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is NullJsonSchemaNode -> {
                 if (json !is NullNode) {
                     errors.add("expected a null, found ${json::class}")
+                }
+            }
+
+            is StringJsonSchemaNode -> {
+
+                if (json !is TextNode) {
+                    errors.add("expected a string, found ${json::class}")
+                }
+
+                val textValue = json.asText()
+
+                if (root.minLength > textValue.length) {
+                    errors.add("minimum length is ${root.minLength}, found ${textValue.length}")
+                }
+
+                if (root.maxLength != null && root.maxLength < textValue.length) {
+                    errors.add("maximum length is ${root.maxLength}, found ${textValue.length}")
+                }
+
+                if (root.pattern != null && !root.pattern.matches(textValue)) {
+                    errors.add("string  does not match pattern")
                 }
             }
 
