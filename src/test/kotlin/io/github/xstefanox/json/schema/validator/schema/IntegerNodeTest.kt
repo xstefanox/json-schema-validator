@@ -169,4 +169,28 @@ internal class IntegerNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
     }
+
+    @Test
+    @DisplayName("if the element is not an integer, no further validation should be performed")
+    internal fun test10() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "integer",
+                "minimum": 42
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "TEST"
+        """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isFalse()
+
+        assertThat(validationResult.errors)
+                .describedAs("the validation should produce only one error")
+                .hasSize(1)
+    }
 }

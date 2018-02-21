@@ -20,7 +20,7 @@ data class Multiplier(private val value: Number) : Comparable<Multiplier> {
         return value
     }
 
-    fun divides(num: Int): Boolean {
+    fun divides(num: Long): Boolean {
         return num.rem(value.toDouble()) == 0.0
     }
 

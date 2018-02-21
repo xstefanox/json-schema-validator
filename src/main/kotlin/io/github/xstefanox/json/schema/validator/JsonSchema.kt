@@ -57,27 +57,28 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
                 if (json !is IntNode && json !is BigIntegerNode && json !is ShortNode && json !is LongNode) {
                     errors += "expected an integer, found ${json::class}"
-                }
+                } else {
 
-                val intValue = json.asInt()
+                    val longValue = json.asLong()
 
-                if (schema.multipleOf != null && !schema.multipleOf.divides(intValue)) {
-                    errors += "$intValue is not a multiple of ${schema.multipleOf}"
-                }
-
-                if (schema.minimum != null) {
-                    if (schema.exclusiveMinimum && intValue <= schema.minimum) {
-                        errors += "$intValue is lesser than lower bound"
-                    } else if (intValue < schema.minimum) {
-                        errors += "$intValue is lesser than lower bound"
+                    if (schema.multipleOf != null && !schema.multipleOf.divides(longValue)) {
+                        errors += "$longValue is not a multiple of ${schema.multipleOf}"
                     }
-                }
 
-                if (schema.maximum != null) {
-                    if (schema.exclusiveMaximum && intValue >= schema.maximum) {
-                        errors += "$intValue is greater than upper bound"
-                    } else if (intValue > schema.maximum) {
-                        errors += "$intValue is greater than upper bound"
+                    if (schema.minimum != null) {
+                        if (schema.exclusiveMinimum && longValue <= schema.minimum) {
+                            errors += "$longValue is lesser than lower bound"
+                        } else if (longValue < schema.minimum) {
+                            errors += "$longValue is lesser than lower bound"
+                        }
+                    }
+
+                    if (schema.maximum != null) {
+                        if (schema.exclusiveMaximum && longValue >= schema.maximum) {
+                            errors += "$longValue is greater than upper bound"
+                        } else if (longValue > schema.maximum) {
+                            errors += "$longValue is greater than upper bound"
+                        }
                     }
                 }
             }
