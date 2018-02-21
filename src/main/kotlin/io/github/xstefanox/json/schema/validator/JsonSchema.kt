@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.BigIntegerNode
 import com.fasterxml.jackson.databind.node.BooleanNode
+import com.fasterxml.jackson.databind.node.DecimalNode
+import com.fasterxml.jackson.databind.node.DoubleNode
+import com.fasterxml.jackson.databind.node.FloatNode
 import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.LongNode
 import com.fasterxml.jackson.databind.node.NullNode
@@ -13,6 +16,7 @@ import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import java.net.URI
 
@@ -66,6 +70,36 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         errors.add("$intValue is greater than upper bound")
                     } else if (intValue > root.maximum) {
                         errors.add("$intValue is greater than upper bound")
+                    }
+                }
+            }
+
+            is NumberJsonSchemaNode -> {
+
+                if (json !is DoubleNode && json !is FloatNode && json !is DecimalNode) {
+                    errors.add("expected a number, found ${json::class}")
+                } else {
+
+                    val doubleValue = json.asDouble()
+
+                    if (root.multipleOf != null && !root.multipleOf.divides(doubleValue)) {
+                        errors.add("$doubleValue is not a multiple of ${root.multipleOf}")
+                    }
+
+                    if (root.minimum != null) {
+                        if (root.exclusiveMinimum && doubleValue <= root.minimum.toDouble()) {
+                            errors.add("$doubleValue is lesser than lower bound")
+                        } else if (doubleValue < root.minimum.toDouble()) {
+                            errors.add("$doubleValue is lesser than lower bound")
+                        }
+                    }
+
+                    if (root.maximum != null) {
+                        if (root.exclusiveMaximum && doubleValue >= root.maximum.toDouble()) {
+                            errors.add("$doubleValue is greater than upper bound")
+                        } else if (doubleValue > root.maximum.toDouble()) {
+                            errors.add("$doubleValue is greater than upper bound")
+                        }
                     }
                 }
             }
