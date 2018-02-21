@@ -123,20 +123,21 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
                 if (json !is TextNode) {
                     errors += "expected a string, found ${json::class}"
-                }
+                } else {
 
-                val textValue = json.asText()
+                    val textValue = json.asText()
 
-                if (schema.minLength > textValue.length) {
-                    errors += "minimum length is ${schema.minLength}, found ${textValue.length}"
-                }
+                    if (schema.minLength > textValue.length) {
+                        errors += "minimum length is ${schema.minLength}, found ${textValue.length}"
+                    }
 
-                if (schema.maxLength != null && schema.maxLength < textValue.length) {
-                    errors += "maximum length is ${schema.maxLength}, found ${textValue.length}"
-                }
+                    if (schema.maxLength != null && schema.maxLength < textValue.length) {
+                        errors += "maximum length is ${schema.maxLength}, found ${textValue.length}"
+                    }
 
-                if (schema.pattern != null && !schema.pattern.matches(textValue)) {
-                    errors += "string  does not match pattern"
+                    if (schema.pattern != null && !schema.pattern.matches(textValue)) {
+                        errors += "string  does not match pattern"
+                    }
                 }
             }
 

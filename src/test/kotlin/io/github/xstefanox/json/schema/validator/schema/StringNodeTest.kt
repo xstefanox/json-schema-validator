@@ -163,4 +163,26 @@ internal class StringNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
     }
+
+    @Test
+    @DisplayName("if the element is not a string, no further validation should be performed")
+    internal fun test9() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "pattern": "/^tes.*${'$'}/"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("42")
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isFalse()
+
+        assertThat(validationResult.errors)
+                .describedAs("the validation should produce only one error")
+                .hasSize(1)
+    }
 }
