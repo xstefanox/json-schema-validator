@@ -11,7 +11,12 @@ data class ObjectJsonSchemaNode(
         val maxProperties: PositiveInt? = null
 ) : JsonSchemaNode() {
 
-    data class Properties(private val properties: Map<Property, JsonSchemaNode>) : Map<Property, JsonSchemaNode> by properties
+    /**
+     * Object properties definition.
+     */
+    data class Properties(
+            private val properties: Map<Property, JsonSchemaNode>
+    ) : Map<Property, JsonSchemaNode> by properties
 
     /**
      * Single property name representation.
@@ -69,7 +74,9 @@ data class ObjectJsonSchemaNode(
     init {
 
         if (!additionalProperties && minProperties > properties?.size ?: 0) {
-            throw IllegalArgumentException("minProperties cannot be greater the defined properties if additionalProperties are not allowed")
+            throw IllegalArgumentException("""
+                minProperties cannot be greater the defined properties if additionalProperties are not allowed
+                """.trimIndent())
         }
 
         if (maxProperties != null) {
