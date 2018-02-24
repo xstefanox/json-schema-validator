@@ -104,4 +104,42 @@ internal class ESRegexTest {
     internal fun test11() {
         assertThat(ESRegex("/test/gi").toString()).isEqualTo("/test/gi")
     }
+
+    @Test
+    @DisplayName("ESRegex should be equal to itself")
+    internal fun test12() {
+
+        val esRegex = ESRegex("test")
+
+        assertThat(esRegex).isEqualTo(esRegex)
+    }
+
+    @Test
+    @DisplayName("ESRegex cannot be equal to object of another class")
+    internal fun test13() {
+
+        val esRegex = ESRegex("test")
+
+        assertThat(esRegex).isNotEqualTo(Any())
+    }
+
+    @Test
+    @DisplayName("ESRegex objects built on the same regex should have the same hascode")
+    internal fun test14() {
+
+        val esRegex1 = ESRegex("test")
+        val esRegex2 = ESRegex("test")
+
+        assertThat(esRegex1).hasSameHashCodeAs(esRegex2)
+    }
+
+    @Test
+    @DisplayName("ESRegex objects built on different regex should have different hascode")
+    internal fun test15() {
+
+        val esRegex1 = ESRegex("test")
+        val esRegex2 = ESRegex("abc")
+
+        assertThat(esRegex1.hashCode()).isNotEqualTo(esRegex2.hashCode())
+    }
 }
