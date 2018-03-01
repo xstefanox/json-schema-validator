@@ -89,4 +89,34 @@ internal class LowerBoundTest {
 
         assertThat(lowerBound.accepts(100)).isTrue()
     }
+
+    @Test
+    @DisplayName("an inclusive lower bound should be lesser than an inclusive lower bound having a greater value")
+    internal fun test10() {
+
+        val lowerBound1 = LowerBound(10, false)
+        val lowerBound2 = LowerBound(11, false)
+
+        assertThat(lowerBound1).isLessThan(lowerBound2)
+    }
+
+    @Test
+    @DisplayName("an exclusive lower bound should be lesser than an inclusive lower bound having a greater value")
+    internal fun test11() {
+
+        val lowerBound1 = LowerBound(10, true)
+        val lowerBound2 = LowerBound(11, false)
+
+        assertThat(lowerBound1).isLessThan(lowerBound2)
+    }
+
+    @Test
+    @DisplayName("an inclusive lower bound should be lesser than an exclusive lower bound having a greater value")
+    internal fun test12() {
+
+        val lowerBound1 = LowerBound(10, false)
+        val lowerBound2 = LowerBound(11, true)
+
+        assertThat(lowerBound1).isLessThan(lowerBound2)
+    }
 }

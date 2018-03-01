@@ -89,4 +89,34 @@ internal class UpperBoundTest {
 
         assertThat(upperBound.accepts(100)).isFalse()
     }
+
+    @Test
+    @DisplayName("an inclusive upper bound should be lesser than an inclusive upper bound having a greater value")
+    internal fun test10() {
+
+        val upperBound1 = UpperBound(10, false)
+        val upperBound2 = UpperBound(11, false)
+
+        assertThat(upperBound1).isLessThan(upperBound2)
+    }
+
+    @Test
+    @DisplayName("an exclusive upper bound should be lesser than an inclusive upper bound having a greater value")
+    internal fun test11() {
+
+        val upperBound1 = UpperBound(10, true)
+        val upperBound2 = UpperBound(11, false)
+
+        assertThat(upperBound1).isLessThan(upperBound2)
+    }
+
+    @Test
+    @DisplayName("an inclusive upper bound should be lesser than an exclusive upper bound having a greater value")
+    internal fun test12() {
+
+        val upperBound1 = UpperBound(10, false)
+        val upperBound2 = UpperBound(11, true)
+
+        assertThat(upperBound1).isLessThan(upperBound2)
+    }
 }
