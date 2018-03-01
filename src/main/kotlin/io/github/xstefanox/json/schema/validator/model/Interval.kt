@@ -6,6 +6,9 @@ data class Interval(val lowerBound: LowerBound?, val upperBound: UpperBound?) {
     constructor(upperBound: UpperBound) : this(null, upperBound)
 
     init {
+        if (lowerBound != null && upperBound != null && upperBound < lowerBound) {
+            throw IllegalArgumentException("upper bound cannot be lesser than lower bound")
+        }
     }
 
     operator fun contains(number: Number): Boolean {

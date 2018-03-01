@@ -14,4 +14,8 @@ data class UpperBound(val value: Number, val exclusive: Boolean = false) : Compa
     override operator fun compareTo(other: UpperBound): Int {
         return value.toDouble().compareTo(other.value.toDouble())
     }
+
+    operator fun compareTo(other: LowerBound): Int {
+        return value.toDouble().compareTo(other.value.toDouble())
+    }
 }
