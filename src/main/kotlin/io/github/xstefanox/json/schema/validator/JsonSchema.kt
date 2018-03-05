@@ -60,7 +60,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
     }
 
     fun validate(json: JsonNode): ValidationResult {
-        return ValidationResult(validate(root, json))
+        val errors = validate(root, json).map { message -> ValidationError(JsonPointer.compile("/"), message) }
+        return ValidationResult(errors)
     }
 
     private fun validate(schema: BooleanJsonSchemaNode, json: JsonNode): List<String> {
