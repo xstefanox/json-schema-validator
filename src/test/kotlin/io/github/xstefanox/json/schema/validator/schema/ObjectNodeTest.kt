@@ -95,7 +95,7 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/firstName")
     }
 
     @Test
@@ -153,7 +153,7 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/lastName")
     }
 
     @Test
@@ -214,7 +214,7 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/address")
     }
 
     @Test
@@ -349,5 +349,46 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isTrue()
         assertThat(validationResult.errors).isEmpty()
+    }
+
+    @Test
+    @DisplayName("when an object is rejected all the non conforming properties should be reported")
+    internal fun test14() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "age": {
+                        "type": "integer"
+                    }
+                },
+                "additionalProperties": false
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            {
+                "firstName": 42,
+                "lastName": false,
+                "age": "test",
+                "something": "is broken"
+            }
+        """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(4)
+        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/firstName")
+        assertThat(validationResult.errors[1]).hasMessage().pointsTo("/lastName")
+        assertThat(validationResult.errors[2]).hasMessage().pointsTo("/age")
+        assertThat(validationResult.errors[3]).hasMessage().pointsTo("/something")
     }
 }

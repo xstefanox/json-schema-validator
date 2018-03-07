@@ -39,10 +39,6 @@ data class ObjectJsonSchemaNode(
         }
 
         @JsonValue
-        fun toJson(): String {
-            return name
-        }
-
         override fun toString(): String {
             return name
         }
