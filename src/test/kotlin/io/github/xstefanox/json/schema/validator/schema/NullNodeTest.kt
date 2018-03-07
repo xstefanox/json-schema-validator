@@ -43,6 +43,8 @@ internal class NullNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be null")
+                .pointsTo("/")
     }
 }

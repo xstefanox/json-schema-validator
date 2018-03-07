@@ -16,9 +16,13 @@ class ValidationErrorAssert(validationError: ValidationError) : AbstractAssert<V
         return this
     }
 
-    fun hasMessage(): ValidationErrorAssert {
-        if (actual.message.isBlank()) {
-            failWithMessage("expected $actual to have a validation message")
+    fun hasMessage(message: String): ValidationErrorAssert {
+        if (actual.message != message) {
+            failWithMessage("""
+                $actual
+                expected message: $message
+                   found message: ${actual.message}
+                """.trimIndent())
         }
 
         return this

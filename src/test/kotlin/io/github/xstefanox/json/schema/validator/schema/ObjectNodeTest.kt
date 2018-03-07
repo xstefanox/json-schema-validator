@@ -43,7 +43,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be an object")
+                .pointsTo("/")
     }
 
     @Test
@@ -63,7 +65,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be an object")
+                .pointsTo("/")
     }
 
     @Test
@@ -95,7 +99,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/firstName")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a string")
+                .pointsTo("/firstName")
     }
 
     @Test
@@ -153,7 +159,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/lastName")
+        assertThat(validationResult.errors[0])
+                .hasMessage("property is missing")
+                .pointsTo("/lastName")
     }
 
     @Test
@@ -214,7 +222,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/address")
+        assertThat(validationResult.errors[0])
+                .hasMessage("additional properties not allowed")
+                .pointsTo("/address")
     }
 
     @Test
@@ -272,7 +282,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should have at least 3 properties")
+                .pointsTo("/")
     }
 
     @Test
@@ -323,7 +335,9 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should have at most 2 properties")
+                .pointsTo("/")
     }
 
     @Test
@@ -386,9 +400,21 @@ internal class ObjectNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(4)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/firstName")
-        assertThat(validationResult.errors[1]).hasMessage().pointsTo("/lastName")
-        assertThat(validationResult.errors[2]).hasMessage().pointsTo("/age")
-        assertThat(validationResult.errors[3]).hasMessage().pointsTo("/something")
+
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a string")
+                .pointsTo("/firstName")
+
+        assertThat(validationResult.errors[1])
+                .hasMessage("element should be a string")
+                .pointsTo("/lastName")
+
+        assertThat(validationResult.errors[2])
+                .hasMessage("element should be an integer")
+                .pointsTo("/age")
+
+        assertThat(validationResult.errors[3])
+                .hasMessage("additional properties not allowed")
+                .pointsTo("/something")
     }
 }

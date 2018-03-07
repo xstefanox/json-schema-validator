@@ -59,7 +59,9 @@ internal class ArrayNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/2")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a boolean")
+                .pointsTo("/2")
     }
 
     @Test
@@ -110,7 +112,9 @@ internal class ArrayNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("expected at least 5 items")
+                .pointsTo("/")
     }
 
     @Test
@@ -169,7 +173,9 @@ internal class ArrayNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("expected at most 3 items")
+                .pointsTo("/")
     }
 
     @Test
@@ -225,7 +231,9 @@ internal class ArrayNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/2")
+        assertThat(validationResult.errors[0])
+                .hasMessage("duplicated element")
+                .pointsTo("/2")
     }
 
     @Test
@@ -328,6 +336,8 @@ internal class ArrayNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be an array")
+                .pointsTo("/")
     }
 }

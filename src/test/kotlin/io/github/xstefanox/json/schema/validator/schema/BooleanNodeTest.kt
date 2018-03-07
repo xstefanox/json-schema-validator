@@ -46,7 +46,7 @@ internal class BooleanNodeTest {
     }
 
     @Test
-    @DisplayName("non boolean property should not be validated")
+    @DisplayName("non boolean element should not be validated")
     internal fun test3() {
 
         val jsonSchema = JsonSchemaFactory().from("""
@@ -61,6 +61,8 @@ internal class BooleanNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a boolean")
+                .pointsTo("/")
     }
 }

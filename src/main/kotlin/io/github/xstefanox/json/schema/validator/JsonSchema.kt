@@ -87,7 +87,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected a ${BooleanNode::class}, found ${json::class}"
+                            "element should be a boolean"
                     )
             )
         }
@@ -101,7 +101,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected an integer, found ${json::class}"
+                            "element should be an integer"
                     )
             )
         }
@@ -113,7 +113,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         if (schema.multipleOf != null && !schema.multipleOf.divides(longValue)) {
             errors += ValidationError(
                     pointer,
-                    "$longValue is not a multiple of ${schema.multipleOf}"
+                    "element should be a multiple of ${schema.multipleOf}"
             )
         }
 
@@ -121,12 +121,12 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             if (schema.exclusiveMinimum && longValue <= schema.minimum) {
                 errors += ValidationError(
                         pointer,
-                        "$longValue is lesser than lower bound"
+                        "element should be greater than ${schema.minimum}"
                 )
             } else if (longValue < schema.minimum) {
                 errors += ValidationError(
                         pointer,
-                        "$longValue is lesser than lower bound"
+                        "element should be greater than or equal to ${schema.minimum}"
                 )
             }
         }
@@ -135,12 +135,12 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             if (schema.exclusiveMaximum && longValue >= schema.maximum) {
                 errors += ValidationError(
                         pointer,
-                        "$longValue is greater than upper bound"
+                        "element should be less than ${schema.maximum}"
                 )
             } else if (longValue > schema.maximum) {
                 errors += ValidationError(
                         pointer,
-                        "$longValue is greater than upper bound"
+                        "element should be less than or equal to ${schema.maximum}"
                 )
             }
         }
@@ -154,7 +154,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected a number, found ${json::class}"
+                            "element should be a number"
                     )
             )
         }
@@ -166,7 +166,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         if (schema.multipleOf != null && !schema.multipleOf.divides(doubleValue)) {
             errors += ValidationError(
                     pointer,
-                    "$doubleValue is not a multiple of ${schema.multipleOf}"
+                    "element should be a multiple of ${schema.multipleOf}"
             )
         }
 
@@ -174,12 +174,12 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             if (schema.exclusiveMinimum && doubleValue <= schema.minimum.toDouble()) {
                 errors += ValidationError(
                         pointer,
-                        "$doubleValue is lesser than lower bound"
+                        "element should be greater than ${schema.minimum}"
                 )
             } else if (doubleValue < schema.minimum.toDouble()) {
                 errors += ValidationError(
                         pointer,
-                        "$doubleValue is lesser than lower bound"
+                        "element should be greater than or equal to ${schema.minimum}"
                 )
             }
         }
@@ -188,12 +188,12 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             if (schema.exclusiveMaximum && doubleValue >= schema.maximum.toDouble()) {
                 errors += ValidationError(
                         pointer,
-                        "$doubleValue is greater than upper bound"
+                        "element should be less than ${schema.maximum}"
                 )
             } else if (doubleValue > schema.maximum.toDouble()) {
                 errors += ValidationError(
                         pointer,
-                        "$doubleValue is greater than upper bound"
+                        "element should be less than or equal to ${schema.maximum}"
                 )
             }
         }
@@ -207,7 +207,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected a null, found ${json::class}"
+                            "element should be null"
                     )
             )
         }
@@ -221,7 +221,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected a string, found ${json::class}"
+                            "element should be a string"
                     )
             )
         }
@@ -234,21 +234,21 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             errors +=
                     ValidationError(
                             pointer,
-                            "minimum length is ${schema.minLength}, found ${textValue.length}"
+                            "string should be at least ${schema.minLength} characters long"
                     )
         }
 
         if (schema.maxLength != null && schema.maxLength < textValue.length) {
             errors += ValidationError(
                     pointer,
-                    "maximum length is ${schema.maxLength}, found ${textValue.length}"
+                    "string should be at most ${schema.maxLength} characters long"
             )
         }
 
         if (schema.pattern != null && !schema.pattern.matches(textValue)) {
             errors += ValidationError(
                     pointer,
-                    "string  does not match pattern"
+                    "element does not match pattern"
             )
         }
 
@@ -261,7 +261,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected an array, found ${json::class}"
+                            "element should be an array"
                     )
             )
         }
@@ -271,14 +271,14 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         if (schema.minItems > json.size()) {
             errors += ValidationError(
                     pointer,
-                    "minimum number of items is ${schema.minItems}, found ${json.size()}"
+                    "expected at least ${schema.minItems} items"
             )
         }
 
         if (schema.maxItems != null && schema.maxItems < json.size()) {
             errors += ValidationError(
                     pointer,
-                    "minimum number of items is ${schema.maxItems}, found ${json.size()}"
+                    "expected at most ${schema.maxItems} items"
             )
         }
 
@@ -293,7 +293,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                 if (!added) {
                     errors += ValidationError(
                             pointer.append(index),
-                            "duplicated element found"
+                            "duplicated element"
                     )
                 }
             }
@@ -315,7 +315,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(
                     ValidationError(
                             pointer,
-                            "expected an object, found ${json::class}"
+                            "element should be an object"
                     )
             )
         }
@@ -346,7 +346,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         .forEach { property ->
                             errors += ValidationError(
                                     pointer.append(property),
-                                    "additional property $property not allowed")
+                                    "additional properties not allowed")
                         }
             }
         }
@@ -354,14 +354,14 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         if (schema.minProperties > jsonPropertyNames.size) {
             errors += ValidationError(
                     pointer,
-                    "expected at least ${schema.minProperties}, found ${jsonPropertyNames.size}"
+                    "element should have at least ${schema.minProperties} properties"
             )
         }
 
         if (schema.maxProperties != null && schema.maxProperties < jsonPropertyNames.size) {
             errors += ValidationError(
                     pointer,
-                    "expected at most ${schema.maxProperties}, found ${jsonPropertyNames.size}"
+                    "element should have at most ${schema.maxProperties} properties"
             )
         }
 
@@ -370,7 +370,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                 .forEach { property ->
                     errors += ValidationError(
                             pointer.append(property),
-                            "missing required property $property"
+                            "property is missing"
                     )
                 }
 

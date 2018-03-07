@@ -30,7 +30,7 @@ internal class StringNodeTest {
     }
 
     @Test
-    @DisplayName("non-null value should not be accepted")
+    @DisplayName("non-string value should not be accepted")
     internal fun test2() {
 
         val jsonSchema = JsonSchemaFactory().from("""
@@ -45,7 +45,9 @@ internal class StringNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a string")
+                .pointsTo("/")
     }
 
     @Test
@@ -67,7 +69,9 @@ internal class StringNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("string should be at least 10 characters long")
+                .pointsTo("/")
     }
 
     @Test
@@ -110,7 +114,9 @@ internal class StringNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("string should be at most 3 characters long")
+                .pointsTo("/")
     }
 
     @Test
@@ -174,7 +180,9 @@ internal class StringNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element does not match pattern")
+                .pointsTo("/")
     }
 
     @Test
@@ -194,6 +202,8 @@ internal class StringNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a string")
+                .pointsTo("/")
     }
 }

@@ -45,7 +45,9 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a number")
+                .pointsTo("/")
     }
 
     @Test
@@ -65,11 +67,13 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a multiple of 1.5")
+                .pointsTo("/")
     }
 
     @Test
-    @DisplayName("number lesser than lower bound should be rejected")
+    @DisplayName("number less than lower bound should be rejected")
     internal fun test4() {
 
         val jsonSchema = JsonSchemaFactory().from("""
@@ -85,7 +89,9 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be greater than or equal to 5.1")
+                .pointsTo("/")
     }
 
     @Test
@@ -125,7 +131,9 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be greater than 3.14")
+                .pointsTo("/")
     }
 
     @Test
@@ -145,7 +153,9 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be less than or equal to 3.14")
+                .pointsTo("/")
     }
 
     @Test
@@ -185,7 +195,9 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be less than 3.14")
+                .pointsTo("/")
     }
 
     @Test
@@ -207,6 +219,8 @@ internal class NumberNodeTest {
 
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a number")
+                .pointsTo("/")
     }
 }

@@ -81,11 +81,25 @@ internal class ComplexJsonSchemaTest {
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(5)
 
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/products/0/id")
-        assertThat(validationResult.errors[1]).hasMessage().pointsTo("/products/1/name")
-        assertThat(validationResult.errors[2]).hasMessage().pointsTo("/products/2/price")
-        assertThat(validationResult.errors[3]).hasMessage().pointsTo("/products/3/returned")
-        assertThat(validationResult.errors[4]).hasMessage().pointsTo("/date")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be an integer")
+                .pointsTo("/products/0/id")
+
+        assertThat(validationResult.errors[1])
+                .hasMessage("element should be a string")
+                .pointsTo("/products/1/name")
+
+        assertThat(validationResult.errors[2])
+                .hasMessage("element should be a number")
+                .pointsTo("/products/2/price")
+
+        assertThat(validationResult.errors[3])
+                .hasMessage("element should be a boolean")
+                .pointsTo("/products/3/returned")
+
+        assertThat(validationResult.errors[4])
+                .hasMessage("element should be null")
+                .pointsTo("/date")
     }
 
     @Test
@@ -182,9 +196,20 @@ internal class ComplexJsonSchemaTest {
         assertThat(validationResult.isSuccessful).isFalse()
         assertThat(validationResult.errors).hasSize(4)
 
-        assertThat(validationResult.errors[0]).hasMessage().pointsTo("/products/0/id")
-        assertThat(validationResult.errors[1]).hasMessage().pointsTo("/products/1/categories/0/name")
-        assertThat(validationResult.errors[2]).hasMessage().pointsTo("/products/2/categories/1/tags/0")
-        assertThat(validationResult.errors[3]).hasMessage().pointsTo("/products/3/categories/0/tags")
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be an integer")
+                .pointsTo("/products/0/id")
+
+        assertThat(validationResult.errors[1])
+                .hasMessage("element should be a string")
+                .pointsTo("/products/1/categories/0/name")
+
+        assertThat(validationResult.errors[2])
+                .hasMessage("element should be a string")
+                .pointsTo("/products/2/categories/1/tags/0")
+
+        assertThat(validationResult.errors[3])
+                .hasMessage("expected at least 1 items")
+                .pointsTo("/products/3/categories/0/tags")
     }
 }
