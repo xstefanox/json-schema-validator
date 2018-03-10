@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue
 enum class StringFormat(private val format: String) {
 
     DATE_TIME("date-time"),
+    DATE("date"),
+    TIME("time"),
     EMAIL("email"),
     HOSTNAME("hostname"),
     IPV4("ipv4"),

@@ -21,8 +21,15 @@ import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE
+import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE_TIME
+import io.github.xstefanox.json.schema.validator.node.StringFormat.TIME
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import java.net.URI
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
+import java.time.format.DateTimeFormatter.ISO_OFFSET_TIME
+import java.time.format.DateTimeParseException
 
 
 /**
@@ -49,17 +56,17 @@ private val FLOAT_NODE_CLASSES = setOf(
 private val ROOT_POINTER = JsonPointer.compile("/")
 
 
-private fun JsonPointer.append(tail: String) : JsonPointer {
+private fun JsonPointer.append(tail: String): JsonPointer {
     return append(JsonPointer.valueOf("/$tail"))
 }
 
 
-private fun JsonPointer.append(tail: Int) : JsonPointer {
+private fun JsonPointer.append(tail: Int): JsonPointer {
     return append(tail.toString())
 }
 
 
-private fun JsonPointer.append(tail: ObjectJsonSchemaNode.Property) : JsonPointer {
+private fun JsonPointer.append(tail: ObjectJsonSchemaNode.Property): JsonPointer {
     return append(tail.toString())
 }
 
@@ -250,6 +257,42 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                     pointer,
                     "element does not match pattern"
             )
+        }
+
+        if (schema.format != null) {
+            when (schema.format) {
+                DATE -> {
+                    try {
+                        ISO_OFFSET_DATE.parse(textValue)
+                    } catch (e: DateTimeParseException) {
+                        errors += ValidationError(
+                                pointer,
+                                "element should be a date"
+                        )
+                    }
+                }
+                TIME -> {
+                    try {
+                        ISO_OFFSET_TIME.parse(textValue)
+                    } catch (e: DateTimeParseException) {
+                        errors += ValidationError(
+                                pointer,
+                                "element should be a time"
+                        )
+                    }
+                }
+                DATE_TIME -> {
+                    try {
+                        ISO_OFFSET_DATE_TIME.parse(textValue)
+                    } catch (e: DateTimeParseException) {
+                        errors += ValidationError(
+                                pointer,
+                                "element should be a date-time"
+                        )
+                    }
+                }
+                else -> throw AssertionError("unsupported JSON Schema string format ${schema.format}")
+            }
         }
 
         return errors

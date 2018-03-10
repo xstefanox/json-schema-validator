@@ -6,6 +6,8 @@ import io.github.xstefanox.json.schema.validator.assertThat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 internal class StringNodeTest {
 
@@ -204,6 +206,201 @@ internal class StringNodeTest {
         assertThat(validationResult.errors).hasSize(1)
         assertThat(validationResult.errors[0])
                 .hasMessage("element should be a string")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("date element should be accepted as ISO8601 date if type format is date")
+    internal fun test10() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "date"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "2018-03-10+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isTrue()
+    }
+
+    @Test
+    @DisplayName("date-time element should be rejected as ISO8601 date if type format is date")
+    internal fun test11() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "date"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "2018-03-10T17:54:20+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a date")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("time element should be rejected as ISO8601 date if type format is date")
+    internal fun test12() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "date"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "17:54:20+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a date")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("time element should be accepted as ISO8601 time if type format is time")
+    internal fun test13() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "time"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "17:54:20+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isTrue()
+    }
+
+    @Test
+    @DisplayName("date-time element should be rejected as ISO8601 date if type format is time")
+    internal fun test14() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "time"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "2018-03-10T17:54:20+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a time")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("date element should be rejected as ISO8601 date if type format is time")
+    internal fun test15() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "time"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "2018-03-10"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a time")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("date-time element should be accepted as ISO8601 date-time if type format is date-time")
+    internal fun test16() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "date-time"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "2018-03-10T17:54:20+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isTrue()
+    }
+
+    @Test
+    @DisplayName("time element should be rejected as ISO8601 date-time if type format is date-time")
+    internal fun test17() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "date-time"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "17:54:20+01:00"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a date-time")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("date element should be rejected as ISO8601 date-time if type format is date-time")
+    internal fun test18() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "date-time"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "2018-03-10"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a date-time")
                 .pointsTo("/")
     }
 }
