@@ -47,6 +47,7 @@ dependencies {
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     compile "javax.mail:javax.mail-api:$javaMailVersion"
     compile "com.sun.mail:javax.mail:$javaMailVersion"
+    compile 'com.github.seancfoley:ipaddress:4.1.0'
 
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testCompile "org.junit.jupiter:junit-jupiter-params:$junitVersion"

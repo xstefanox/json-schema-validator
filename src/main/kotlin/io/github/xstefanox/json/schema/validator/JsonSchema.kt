@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ShortNode
 import com.fasterxml.jackson.databind.node.TextNode
+import inet.ipaddr.HostName
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
@@ -21,10 +22,10 @@ import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
-import io.github.xstefanox.json.schema.validator.node.StringFormat
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE_TIME
 import io.github.xstefanox.json.schema.validator.node.StringFormat.EMAIL
+import io.github.xstefanox.json.schema.validator.node.StringFormat.HOSTNAME
 import io.github.xstefanox.json.schema.validator.node.StringFormat.TIME
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import java.net.URI
@@ -302,6 +303,14 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         errors += ValidationError(
                                 pointer,
                                 "element should be an email address"
+                        )
+                    }
+                }
+                HOSTNAME -> {
+                    if (!HostName(textValue).isValid) {
+                        errors += ValidationError(
+                                pointer,
+                                "element should be a host name"
                         )
                     }
                 }

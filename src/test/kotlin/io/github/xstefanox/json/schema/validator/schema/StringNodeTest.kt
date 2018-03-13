@@ -445,4 +445,48 @@ internal class StringNodeTest {
                 .hasMessage("element should be an email address")
                 .pointsTo("/")
     }
+
+    @Test
+    @DisplayName("valid host name should be accepted if type format is hostname")
+    internal fun test21() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "hostname"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "this.is.a.valid.hostname"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isTrue()
+    }
+
+    @Test
+    @DisplayName("invalid host name should be rejected if type format is hostname")
+    internal fun test22() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "hostname"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "THIS IS NOT A VALID HOST NAME"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be a host name")
+                .pointsTo("/")
+    }
 }
