@@ -21,8 +21,10 @@ import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.StringFormat
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE_TIME
+import io.github.xstefanox.json.schema.validator.node.StringFormat.EMAIL
 import io.github.xstefanox.json.schema.validator.node.StringFormat.TIME
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import java.net.URI
@@ -30,6 +32,8 @@ import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE
 import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 import java.time.format.DateTimeFormatter.ISO_OFFSET_TIME
 import java.time.format.DateTimeParseException
+import javax.mail.internet.AddressException
+import javax.mail.internet.InternetAddress
 
 
 /**
@@ -288,6 +292,16 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         errors += ValidationError(
                                 pointer,
                                 "element should be a date-time"
+                        )
+                    }
+                }
+                EMAIL -> {
+                    try {
+                        InternetAddress(textValue)
+                    } catch (e: AddressException) {
+                        errors += ValidationError(
+                                pointer,
+                                "element should be an email address"
                         )
                     }
                 }

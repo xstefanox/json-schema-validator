@@ -6,8 +6,6 @@ import io.github.xstefanox.json.schema.validator.assertThat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 internal class StringNodeTest {
 
@@ -401,6 +399,50 @@ internal class StringNodeTest {
         assertThat(validationResult.errors).hasSize(1)
         assertThat(validationResult.errors[0])
                 .hasMessage("element should be a date-time")
+                .pointsTo("/")
+    }
+
+    @Test
+    @DisplayName("valid email address should be accepted if type format is email")
+    internal fun test19() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "email"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "leeroy.jenkins@example.org"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isTrue()
+    }
+
+    @Test
+    @DisplayName("invalid email address should be rejected if type format is email")
+    internal fun test20() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "string",
+                "format": "email"
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            "THIS IS NOT A VALID EMAIL ADDRESS"
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult.isSuccessful).isFalse()
+        assertThat(validationResult.errors).hasSize(1)
+        assertThat(validationResult.errors[0])
+                .hasMessage("element should be an email address")
                 .pointsTo("/")
     }
 }
