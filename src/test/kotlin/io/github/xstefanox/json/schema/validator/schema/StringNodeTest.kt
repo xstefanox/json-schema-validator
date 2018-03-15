@@ -3,7 +3,6 @@ package io.github.xstefanox.json.schema.validator.schema
 import TestUtils.Companion.OBJECT_MAPPER
 import io.github.xstefanox.json.schema.validator.JsonSchemaFactory
 import io.github.xstefanox.json.schema.validator.assertThat
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -25,8 +24,7 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -43,9 +41,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a string")
                 .pointsTo("/")
     }
@@ -67,9 +66,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("string should be at least 10 characters long")
                 .pointsTo("/")
     }
@@ -91,8 +91,7 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -112,9 +111,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("string should be at most 3 characters long")
                 .pointsTo("/")
     }
@@ -136,8 +136,7 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -157,8 +156,7 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -178,9 +176,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element does not match pattern")
                 .pointsTo("/")
     }
@@ -200,9 +199,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a string")
                 .pointsTo("/")
     }
@@ -223,7 +223,8 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isTrue()
+
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -242,9 +243,11 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a date")
                 .pointsTo("/")
     }
@@ -265,9 +268,11 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a date")
                 .pointsTo("/")
     }
@@ -288,7 +293,8 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isTrue()
+
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -307,9 +313,11 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a time")
                 .pointsTo("/")
     }
@@ -330,9 +338,11 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a time")
                 .pointsTo("/")
     }
@@ -353,7 +363,8 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isTrue()
+
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -372,9 +383,11 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a date-time")
                 .pointsTo("/")
     }
@@ -395,9 +408,11 @@ internal class StringNodeTest {
             """.trimIndent())
 
         val validationResult = jsonSchema.validate(json)
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a date-time")
                 .pointsTo("/")
     }
@@ -419,7 +434,7 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -439,9 +454,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be an email address")
                 .pointsTo("/")
     }
@@ -463,7 +479,7 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -483,9 +499,10 @@ internal class StringNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a host name")
                 .pointsTo("/")
     }

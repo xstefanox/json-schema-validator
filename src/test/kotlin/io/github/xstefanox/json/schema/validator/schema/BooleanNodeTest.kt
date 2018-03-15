@@ -3,7 +3,6 @@ package io.github.xstefanox.json.schema.validator.schema
 import TestUtils.Companion.OBJECT_MAPPER
 import io.github.xstefanox.json.schema.validator.JsonSchemaFactory
 import io.github.xstefanox.json.schema.validator.assertThat
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -23,8 +22,7 @@ internal class BooleanNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -41,8 +39,7 @@ internal class BooleanNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -59,9 +56,10 @@ internal class BooleanNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a boolean")
                 .pointsTo("/")
     }

@@ -3,7 +3,6 @@ package io.github.xstefanox.json.schema.validator.schema
 import TestUtils.Companion.OBJECT_MAPPER
 import io.github.xstefanox.json.schema.validator.JsonSchemaFactory
 import io.github.xstefanox.json.schema.validator.assertThat
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -23,8 +22,7 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -41,9 +39,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be an object")
                 .pointsTo("/")
     }
@@ -63,9 +62,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be an object")
                 .pointsTo("/")
     }
@@ -97,9 +97,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a string")
                 .pointsTo("/firstName")
     }
@@ -131,8 +132,7 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -157,9 +157,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("property is missing")
                 .pointsTo("/lastName")
     }
@@ -187,8 +188,7 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -220,9 +220,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("additional properties not allowed")
                 .pointsTo("/address")
     }
@@ -256,8 +257,7 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -280,9 +280,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should have at least 3 properties")
                 .pointsTo("/")
     }
@@ -308,8 +309,7 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -333,9 +333,10 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should have at most 2 properties")
                 .pointsTo("/")
     }
@@ -361,8 +362,7 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
-        assertThat(validationResult.errors).isEmpty()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -398,23 +398,24 @@ internal class ObjectNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(4)
+        // @formatter:off
 
-        assertThat(validationResult.errors[0])
-                .hasMessage("element should be a string")
-                .pointsTo("/firstName")
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(4)
+                .at(0)
+                    .hasMessage("element should be a string")
+                    .pointsTo("/firstName")
+                .at(1)
+                    .hasMessage("element should be a string")
+                    .pointsTo("/lastName")
+                .at(2)
+                    .hasMessage("element should be an integer")
+                    .pointsTo("/age")
+                .at(3)
+                    .hasMessage("additional properties not allowed")
+                    .pointsTo("/something")
 
-        assertThat(validationResult.errors[1])
-                .hasMessage("element should be a string")
-                .pointsTo("/lastName")
-
-        assertThat(validationResult.errors[2])
-                .hasMessage("element should be an integer")
-                .pointsTo("/age")
-
-        assertThat(validationResult.errors[3])
-                .hasMessage("additional properties not allowed")
-                .pointsTo("/something")
+        // @formatter:on
     }
 }

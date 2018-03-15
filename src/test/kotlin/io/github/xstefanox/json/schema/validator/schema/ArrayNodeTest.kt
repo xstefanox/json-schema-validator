@@ -3,7 +3,6 @@ package io.github.xstefanox.json.schema.validator.schema
 import TestUtils.Companion.OBJECT_MAPPER
 import io.github.xstefanox.json.schema.validator.JsonSchemaFactory
 import io.github.xstefanox.json.schema.validator.assertThat
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -31,7 +30,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -57,9 +56,10 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be a boolean")
                 .pointsTo("/2")
     }
@@ -84,7 +84,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -110,9 +110,10 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("expected at least 5 items")
                 .pointsTo("/")
     }
@@ -142,7 +143,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -171,9 +172,10 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("expected at most 3 items")
                 .pointsTo("/")
     }
@@ -202,7 +204,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -229,9 +231,10 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("duplicated element")
                 .pointsTo("/2")
     }
@@ -259,7 +262,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -288,7 +291,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -317,7 +320,7 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isTrue()
+        assertThat(validationResult).isSuccessful()
     }
 
     @Test
@@ -334,9 +337,10 @@ internal class ArrayNodeTest {
 
         val validationResult = jsonSchema.validate(json)
 
-        assertThat(validationResult.isSuccessful).isFalse()
-        assertThat(validationResult.errors).hasSize(1)
-        assertThat(validationResult.errors[0])
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .hasSize(1)
+                .first()
                 .hasMessage("element should be an array")
                 .pointsTo("/")
     }
