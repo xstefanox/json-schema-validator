@@ -21,7 +21,7 @@ internal class BooleanJsonSchemaNodeTest {
     @Test
     @DisplayName("boolean JSON Schema node must be deserialized")
     internal fun test2() {
-        assertThat(OBJECT_MAPPER.readValue<BooleanJsonSchemaNode>("""
+        assertThat(OBJECT_MAPPER.readValue<JsonSchemaNode>("""
             {
               "type" : "boolean"
             }

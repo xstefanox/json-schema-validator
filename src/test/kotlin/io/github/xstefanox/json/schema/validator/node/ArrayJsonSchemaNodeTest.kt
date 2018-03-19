@@ -42,7 +42,7 @@ internal class ArrayJsonSchemaNodeTest {
     @DisplayName("array JSON Schema can be deserialized")
     internal fun test3() {
 
-        val arrayJsonSchemaNode = OBJECT_MAPPER.readValue<ArrayJsonSchemaNode>("""
+        val arrayJsonSchemaNode = OBJECT_MAPPER.readValue<JsonSchemaNode>("""
             {
               "type" : "array",
               "items" : null,

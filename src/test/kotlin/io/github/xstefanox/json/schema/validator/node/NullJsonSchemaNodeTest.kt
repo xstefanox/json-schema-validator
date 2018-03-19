@@ -21,7 +21,7 @@ internal class NullJsonSchemaNodeTest {
     @Test
     @DisplayName("null JSON Schema node must be deserialized")
     internal fun test2() {
-        assertThat(OBJECT_MAPPER.readValue<NullJsonSchemaNode>("""
+        assertThat(OBJECT_MAPPER.readValue<JsonSchemaNode>("""
             {
               "type" : "null"
             }

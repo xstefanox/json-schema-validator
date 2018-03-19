@@ -12,7 +12,7 @@ internal class NumberJsonSchemaNodeTest {
     @Test
     @DisplayName("number type should be deserialized")
     internal fun test1() {
-        OBJECT_MAPPER.readValue<NumberJsonSchemaNode>("""
+        OBJECT_MAPPER.readValue<JsonSchemaNode>("""
             {
                 "type": "number"
             }

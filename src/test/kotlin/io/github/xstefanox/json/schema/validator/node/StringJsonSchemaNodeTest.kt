@@ -29,7 +29,7 @@ internal class StringJsonSchemaNodeTest {
     @DisplayName("string JSON Schema node must be deserialized")
     internal fun test2() {
 
-        assertThat(OBJECT_MAPPER.readValue<StringJsonSchemaNode>("""
+        assertThat(OBJECT_MAPPER.readValue<JsonSchemaNode>("""
             {
               "type" : "string",
               "minLength" : 1,
