@@ -2,6 +2,8 @@ package io.github.xstefanox.json.schema.validator
 
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.BigIntegerNode
 import com.fasterxml.jackson.databind.node.BooleanNode
@@ -14,14 +16,23 @@ import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ShortNode
 import com.fasterxml.jackson.databind.node.TextNode
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.convertValue
 import inet.ipaddr.HostName
+import io.github.xstefanox.json.schema.validator.node.ArrayConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.BooleanConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.IntegerConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.NullConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.NumberConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.ObjectConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.StringConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE_TIME
 import io.github.xstefanox.json.schema.validator.node.StringFormat.EMAIL
@@ -40,7 +51,7 @@ import javax.mail.internet.InternetAddress
 /**
  * The [Set] of [com.fasterxml.jackson.databind.node.NumericNode]s that can contain integer values.
  */
-private val INTEGER_NODE_CLASSES = setOf(
+val INTEGER_NODE_CLASSES = setOf(
         IntNode::class,
         BigIntegerNode::class,
         ShortNode::class,
@@ -51,7 +62,7 @@ private val INTEGER_NODE_CLASSES = setOf(
 /**
  * The [Set] of [com.fasterxml.jackson.databind.node.NumericNode]s that can contain floating point values.
  */
-private val FLOAT_NODE_CLASSES = setOf(
+val NUMBER_NODE_CLASSES = setOf(
         DoubleNode::class,
         FloatNode::class,
         DecimalNode::class
@@ -77,6 +88,13 @@ private fun JsonPointer.append(tail: ObjectJsonSchemaNode.Property): JsonPointer
 
 
 class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
+
+    private val objectMapper: ObjectMapper by lazy {
+
+    ObjectMapper()
+            .configure(SerializationFeature.INDENT_OUTPUT, true)
+            .registerModule(KotlinModule())
+}
 
     companion object {
 
@@ -162,7 +180,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
     private fun validate(schema: NumberJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
-        if (json::class !in FLOAT_NODE_CLASSES) {
+        if (json::class !in NUMBER_NODE_CLASSES) {
             return listOf(
                     ValidationError(
                             pointer,
@@ -443,6 +461,148 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         return errors
     }
 
+    private fun validate(schema: IntegerConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json::class !in INTEGER_NODE_CLASSES) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be an integer"
+                    )
+            )
+        }
+
+        if (json.asLong() != schema.const.toLong()) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element should be equal to ${schema.const}"
+            ))
+        }
+
+        return listOf()
+    }
+
+    private fun validate(schema: NumberConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json::class !in NUMBER_NODE_CLASSES) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be a number"
+                    )
+            )
+        }
+
+        if (json.asLong() != schema.const.toLong()) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element should be equal to ${schema.const}"
+            ))
+        }
+
+        return listOf()
+    }
+
+    private fun validate(schema: BooleanConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json !is BooleanNode) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be a boolean"
+                    )
+            )
+        }
+
+        if (json.asBoolean() != schema.const) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element should be equal to ${schema.const}"
+            ))
+        }
+
+        return listOf()
+    }
+
+    private fun validate(schema: NullConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json !is NullNode) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be null"
+                    )
+            )
+        }
+
+        return listOf()
+    }
+
+    private fun validate(schema: StringConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json !is TextNode) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be a string"
+                    )
+            )
+        }
+
+        if (json.asText() != schema.const) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element should be equal to ${schema.const}"
+            ))
+        }
+
+        return listOf()
+    }
+
+    private fun validate(schema: ArrayConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json !is ArrayNode) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be an array"
+                    )
+            )
+        }
+
+        val values = objectMapper.convertValue<List<Any>>(json)
+
+        if (values != schema.const) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element should be equal to ${schema.const}"
+            ))
+        }
+
+        return listOf()
+    }
+
+    private fun validate(schema: ObjectConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        if (json !is ObjectNode) {
+            return listOf(
+                    ValidationError(
+                            pointer,
+                            "element should be an object"
+                    )
+            )
+        }
+
+        if (json != schema.const) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element should be equal to ${schema.const}"
+            ))
+        }
+
+        return listOf()
+    }
+
     private fun validate(schema: JsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
         return when (schema) {
@@ -453,7 +613,14 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is StringJsonSchemaNode -> validate(schema, json, pointer)
             is ArrayJsonSchemaNode -> validate(schema, json, pointer)
             is ObjectJsonSchemaNode -> validate(schema, json, pointer)
-            else -> throw AssertionError("unsupported JSON Schema type ${schema::class}")
+            is IntegerConstJsonSchemaNode -> validate(schema, json, pointer)
+            is BooleanConstJsonSchemaNode -> validate(schema, json, pointer)
+            is NullConstJsonSchemaNode -> validate(schema, json, pointer)
+            is NumberConstJsonSchemaNode -> validate(schema, json, pointer)
+            is StringConstJsonSchemaNode -> validate(schema, json, pointer)
+            is ArrayConstJsonSchemaNode -> validate(schema, json, pointer)
+            is ObjectConstJsonSchemaNode -> validate(schema, json, pointer)
+            else -> throw UnsupportedJsonSchemaClassException(schema::class)
         }
     }
 }

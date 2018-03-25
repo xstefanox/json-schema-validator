@@ -4,6 +4,7 @@ import TestUtils.Companion.OBJECT_MAPPER
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.assertj.core.api.SoftAssertions.assertSoftly
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
@@ -19,6 +20,7 @@ internal class SchemaOrgTestSuite {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("getTests")
+    @DisplayName("draft 7 official tests")
     internal fun testAll(schemaOrgTestAssertion: SchemaOrgTest) {
 
         val schema = JsonSchemaFactory().from(schemaOrgTestAssertion.schema.toString())

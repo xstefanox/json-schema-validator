@@ -1,6 +1,9 @@
 package io.github.xstefanox.json.schema.validator.node
 
+import TestUtils.Companion.OBJECT_MAPPER
 import io.github.xstefanox.json.schema.validator.model.PositiveInt
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -38,5 +41,23 @@ internal class ObjectJsonSchemaNodeTest {
                     minProperties = PositiveInt(1)
             )
         })
+    }
+
+    @Test
+    @DisplayName("object JSON Schema node can be serialized")
+    internal fun test4() {
+
+        val serializedNode = OBJECT_MAPPER.writeValueAsString(ObjectJsonSchemaNode())
+
+        assertThat(serializedNode).isEqualTo("""
+            {
+              "type" : "object",
+              "properties" : null,
+              "required" : [ ],
+              "additionalProperties" : true,
+              "minProperties" : 0,
+              "maxProperties" : null
+            }
+        """.trimIndent())
     }
 }

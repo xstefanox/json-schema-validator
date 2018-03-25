@@ -1,6 +1,8 @@
 package io.github.xstefanox.json.schema.validator
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -16,7 +18,13 @@ class JsonSchemaFactory {
 
     private val objectMapper: ObjectMapper by lazy {
 
-        ObjectMapper().registerModule(KotlinModule())
+        val simpleModule = SimpleModule()
+                .addDeserializer(JsonSchemaNode::class.java, JsonSchemaNodeDeserializer())
+
+        ObjectMapper()
+                .configure(SerializationFeature.INDENT_OUTPUT, true)
+                .registerModule(KotlinModule())
+                .registerModule(simpleModule)
     }
 
     fun from(schemaString: String): JsonSchema {
