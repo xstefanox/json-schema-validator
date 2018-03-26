@@ -23,6 +23,7 @@ import io.github.xstefanox.json.schema.validator.node.ArrayConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.EnumJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
@@ -603,6 +604,20 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         return listOf()
     }
 
+    private fun validate(schema: EnumJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        val values = objectMapper.convertValue<List<JsonNode>>(schema.enum)
+
+        if (json !in values) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element not found in enum"
+            ))
+        }
+
+        return listOf()
+    }
+
     private fun validate(schema: JsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
         return when (schema) {
@@ -620,6 +635,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is StringConstJsonSchemaNode -> validate(schema, json, pointer)
             is ArrayConstJsonSchemaNode -> validate(schema, json, pointer)
             is ObjectConstJsonSchemaNode -> validate(schema, json, pointer)
+            is EnumJsonSchemaNode -> validate(schema, json, pointer)
             else -> throw UnsupportedJsonSchemaClassException(schema::class)
         }
     }

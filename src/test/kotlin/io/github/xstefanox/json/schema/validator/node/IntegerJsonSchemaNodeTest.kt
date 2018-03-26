@@ -12,11 +12,14 @@ internal class IntegerJsonSchemaNodeTest {
     @Test
     @DisplayName("integer type should be deserialized")
     internal fun test1() {
-        OBJECT_MAPPER.readValue<JsonSchemaNode>("""
+
+        val jsonSchemaNode = OBJECT_MAPPER.readValue<JsonSchemaNode>("""
             {
                 "type": "integer"
             }
             """)
+
+        assertThat(jsonSchemaNode).isInstanceOf(IntegerJsonSchemaNode::class.java)
     }
 
     @Test
