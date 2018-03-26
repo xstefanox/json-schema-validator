@@ -92,10 +92,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
     private val objectMapper: ObjectMapper by lazy {
 
-    ObjectMapper()
-            .configure(SerializationFeature.INDENT_OUTPUT, true)
-            .registerModule(KotlinModule())
-}
+        ObjectMapper()
+                .configure(SerializationFeature.INDENT_OUTPUT, true)
+                .registerModule(KotlinModule())
+    }
 
     companion object {
 
@@ -388,6 +388,18 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
             json.forEachIndexed { index, jsonNode ->
                 errors += validate(schema.items, jsonNode, pointer.append(index))
+            }
+        }
+
+        if (schema.contains != null) {
+
+            val validItems = json.filter { jsonNode -> validate(schema.contains, jsonNode, pointer).isEmpty() }
+
+            if (validItems.isEmpty()) {
+                return listOf(ValidationError(
+                        pointer,
+                        """no item matching "contains" schema found"""
+                ))
             }
         }
 

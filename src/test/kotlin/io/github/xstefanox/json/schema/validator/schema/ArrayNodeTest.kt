@@ -344,4 +344,71 @@ internal class ArrayNodeTest {
                 .hasMessage("element should be an array")
                 .pointsTo("/")
     }
+
+    @Test
+    @DisplayName("validation should succeed if at least one item conforms to the contains JSON Schema")
+    internal fun test13() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "array",
+                "items": {
+                    "type": "integer"
+                },
+                "contains": {
+                    "type": "integer",
+                    "multipleOf": 3
+                }
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult).isSuccessful()
+    }
+
+    @Test
+    @DisplayName("validation should fail if no one item conforms to the contains JSON Schema")
+    internal fun test14() {
+
+        val jsonSchema = JsonSchemaFactory().from("""
+            {
+                "type": "array",
+                "items": {
+                    "type": "integer"
+                },
+                "contains": {
+                    "type": "integer",
+                    "multipleOf": 3
+                }
+            }
+            """)
+
+        val json = OBJECT_MAPPER.readTree("""
+            [
+                1,
+                2,
+                4,
+                5
+            ]
+            """.trimIndent())
+
+        val validationResult = jsonSchema.validate(json)
+
+        assertThat(validationResult)
+                .isNotSuccessful()
+                .first()
+                .hasMessage("""no item matching "contains" schema found""")
+                .pointsTo("/")
+    }
 }

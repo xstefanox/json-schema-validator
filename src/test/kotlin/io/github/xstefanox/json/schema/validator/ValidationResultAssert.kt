@@ -22,7 +22,12 @@ class ValidationResultAssert(
     fun isSuccessful(): ValidationResultAssert {
 
         if (!actual.isSuccessful) {
-            failWithMessage("expected validation to be successful")
+
+            val errorMessages = actual
+                    .map(ValidationError::message)
+                    .joinToString("\n")
+
+            failWithMessage("expected validation to be successful, found ${actual.size} errors:\n$errorMessages")
         }
 
         return this

@@ -16,7 +16,8 @@ data class ArrayJsonSchemaNode(
         val items: JsonSchemaNode? = null,
         val minItems: PositiveInt = PositiveInt(0),
         val maxItems: PositiveInt? = null,
-        val uniqueItems: Boolean = false
+        val uniqueItems: Boolean = false,
+        val contains: JsonSchemaNode? = null
 ) : JsonSchemaNode() {
 
     init {

@@ -33,7 +33,8 @@ internal class ArrayJsonSchemaNodeTest {
               "items" : null,
               "minItems" : 0,
               "maxItems" : null,
-              "uniqueItems" : false
+              "uniqueItems" : false,
+              "contains" : null
             }
         """.trimIndent())
     }
@@ -48,15 +49,19 @@ internal class ArrayJsonSchemaNodeTest {
               "items" : null,
               "minItems" : 1,
               "maxItems" : 2,
-              "uniqueItems" : true
+              "uniqueItems" : true,
+              "contains": {
+                "type": "string"
+              }
             }
         """)
 
         assertThat(arrayJsonSchemaNode).isEqualTo(ArrayJsonSchemaNode(
                 minItems = PositiveInt(1),
                 maxItems = PositiveInt(2),
-                uniqueItems = true)
-        )
+                uniqueItems = true,
+                contains = StringJsonSchemaNode()
+        ))
     }
 
     @Test
