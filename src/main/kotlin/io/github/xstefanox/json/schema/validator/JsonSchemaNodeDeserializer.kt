@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.convertValue
+import io.github.xstefanox.json.schema.validator.node.AlwaysValidatingJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanConstJsonSchemaNode
@@ -97,6 +98,14 @@ class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNod
                     "array" -> objectMapper.convertValue<ArrayJsonSchemaNode>(json)
                     else -> throw UnsupportedJsonSchemaTypeException(type)
                 }
+            }
+        }
+
+        if (json is BooleanNode) {
+            return if (json.asBoolean()) {
+                AlwaysValidatingJsonSchemaNode
+            } else {
+                throw UnrecognizableJsonSchemaException(json)
             }
         }
 

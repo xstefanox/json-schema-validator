@@ -1,5 +1,6 @@
 package io.github.xstefanox.json.schema.validator
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -29,7 +30,7 @@ class JsonSchemaFactory {
 
     fun from(schemaString: String): JsonSchema {
 
-        val schemaTree = objectMapper.readValue<ObjectNode>(schemaString)
+        val schemaTree = objectMapper.readValue<JsonNode>(schemaString)
         val schemaNamespaceNode = schemaTree.at(SCHEMA_POINTER)
 
         val schemaNamespace = if (schemaNamespaceNode is TextNode) {
@@ -38,7 +39,9 @@ class JsonSchemaFactory {
             DEFAULT_SCHEMA_URI
         }
 
-        schemaTree.remove(SCHEMA_FIELD)
+        if (schemaTree is ObjectNode) {
+            schemaTree.remove(SCHEMA_FIELD)
+        }
 
         val rootJsonSchemaNode = objectMapper.convertValue<JsonSchemaNode>(schemaTree)
 

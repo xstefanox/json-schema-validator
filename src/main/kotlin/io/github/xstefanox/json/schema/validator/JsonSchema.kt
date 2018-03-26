@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.convertValue
 import inet.ipaddr.HostName
+import io.github.xstefanox.json.schema.validator.node.AlwaysValidatingJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanConstJsonSchemaNode
@@ -630,6 +631,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         return listOf()
     }
 
+    private fun validate(schema: AlwaysValidatingJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+        return listOf()
+    }
+
     private fun validate(schema: JsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
         return when (schema) {
@@ -648,6 +653,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is ArrayConstJsonSchemaNode -> validate(schema, json, pointer)
             is ObjectConstJsonSchemaNode -> validate(schema, json, pointer)
             is EnumJsonSchemaNode -> validate(schema, json, pointer)
+            is AlwaysValidatingJsonSchemaNode -> validate(schema, json, pointer)
             else -> throw UnsupportedJsonSchemaClassException(schema::class)
         }
     }
