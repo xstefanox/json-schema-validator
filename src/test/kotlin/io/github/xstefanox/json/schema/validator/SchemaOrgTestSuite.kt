@@ -13,7 +13,10 @@ import java.util.stream.Stream
 import kotlin.streams.asStream
 
 
-private const val SCHEMA_ORG_TEST_SUITE_DIR = "/submodules/json-schema-org-test-suite/tests/draft7"
+private val SCHEMA_ORG_TEST_SUITE_DIR = Paths.get(
+        System.getProperty("user.dir"),
+        "/submodules/json-schema-org-test-suite/tests/draft7"
+)
 
 
 internal class SchemaOrgTestSuite {
@@ -21,13 +24,13 @@ internal class SchemaOrgTestSuite {
     @ParameterizedTest(name = "{0}")
     @MethodSource("getTests")
     @DisplayName("draft 7 official tests")
-    internal fun testAll(schemaOrgTestAssertion: SchemaOrgTest) {
+    internal fun testAll(schemaOrgTestAssertion: JsonSchemaOrgTestFile) {
 
-        val schema = JsonSchemaFactory().from(schemaOrgTestAssertion.schema.toString())
+        val schema = JsonSchemaFactory().from(schemaOrgTestAssertion.test.schema.toString())
 
         assertSoftly { softly ->
 
-            schemaOrgTestAssertion.tests.forEach { testAssertion ->
+            schemaOrgTestAssertion.test.tests.forEach { testAssertion ->
 
                 val validationResult = schema.validate(testAssertion.data)
 
@@ -43,22 +46,33 @@ internal class SchemaOrgTestSuite {
 
         @JvmStatic
         @Suppress("unused")
-        private fun getTests(): Stream<SchemaOrgTest> {
-            return Paths.get(System.getProperty("user.dir"), SCHEMA_ORG_TEST_SUITE_DIR)
+        private fun getTests(): Stream<JsonSchemaOrgTestFile> {
+            return SCHEMA_ORG_TEST_SUITE_DIR
                     .toFile()
                     .walk()
                     .filterNot(File::isDirectory)
-                    .flatMap { OBJECT_MAPPER.readValue<List<SchemaOrgTest>>(it).asSequence() }
+                    .flatMap { file ->
+                        OBJECT_MAPPER.readValue<List<JsonSchemaOrgTest>>(file)
+                                .asSequence()
+                                .map { test ->
+                                    JsonSchemaOrgTestFile(test, file)
+                                }
+                    }
                     .asStream()
         }
     }
 
-    internal data class SchemaOrgTest(val description: String, val schema: JsonNode, val tests: List<TestAssertion>) {
-
-        override fun toString(): String {
-            return description
-        }
-    }
+    internal data class JsonSchemaOrgTest(val description: String, val schema: JsonNode, val tests: List<TestAssertion>)
 
     internal data class TestAssertion(val description: String, val data: JsonNode, val valid: Boolean)
+
+    internal data class JsonSchemaOrgTestFile(
+            val test: JsonSchemaOrgTest,
+            private val file: File
+    ) {
+
+        override fun toString(): String {
+            return "${file.path.removePrefix(SCHEMA_ORG_TEST_SUITE_DIR.toString()).removePrefix("/")} : ${test.description}"
+        }
+    }
 }
