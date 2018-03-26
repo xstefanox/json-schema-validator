@@ -20,6 +20,7 @@ import io.github.xstefanox.json.schema.validator.node.EnumJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.NeverValidatingJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberConstJsonSchemaNode
@@ -105,7 +106,7 @@ class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNod
             return if (json.asBoolean()) {
                 AlwaysValidatingJsonSchemaNode
             } else {
-                throw UnrecognizableJsonSchemaException(json)
+                NeverValidatingJsonSchemaNode
             }
         }
 
