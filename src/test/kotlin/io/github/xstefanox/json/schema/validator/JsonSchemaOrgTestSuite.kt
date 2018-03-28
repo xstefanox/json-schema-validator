@@ -19,18 +19,18 @@ private val SCHEMA_ORG_TEST_SUITE_DIR = Paths.get(
 )
 
 
-internal class SchemaOrgTestSuite {
+internal class JsonSchemaOrgTestSuite {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("getTests")
     @DisplayName("draft 7 official tests")
-    internal fun testAll(schemaOrgTestAssertion: JsonSchemaOrgTestFile) {
+    internal fun testAll(jsonSchemaOrgTestAssertion: JsonSchemaOrgTestFile) {
 
-        val schema = JsonSchemaFactory().from(schemaOrgTestAssertion.test.schema.toString())
+        val schema = JsonSchemaFactory().from(jsonSchemaOrgTestAssertion.test.schema.toString())
 
         assertSoftly { softly ->
 
-            schemaOrgTestAssertion.test.tests.forEach { testAssertion ->
+            jsonSchemaOrgTestAssertion.test.tests.forEach { testAssertion ->
 
                 val validationResult = schema.validate(testAssertion.data)
 
