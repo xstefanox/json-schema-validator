@@ -29,6 +29,7 @@ import io.github.xstefanox.json.schema.validator.node.IntegerConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.IntegerJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NeverValidatingJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.NotJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NullJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberConstJsonSchemaNode
@@ -643,6 +644,20 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         ))
     }
 
+    private fun validate(schema: NotJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        val nestedSchemaValidationResult = validate(schema.not, json, pointer)
+
+        return if (nestedSchemaValidationResult.isNotEmpty()) {
+            emptyList()
+        } else {
+            listOf(ValidationError(
+                    pointer,
+                    "element should not be valid"
+            ))
+        }
+    }
+
     private fun validate(schema: JsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
         return when (schema) {
@@ -663,6 +678,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is EnumJsonSchemaNode -> validate(schema, json, pointer)
             is AlwaysValidatingJsonSchemaNode -> validate(schema, json, pointer)
             is NeverValidatingJsonSchemaNode -> validate(schema, json, pointer)
+            is NotJsonSchemaNode -> validate(schema, json, pointer)
             else -> throw UnsupportedJsonSchemaClassException(schema::class)
         }
     }
