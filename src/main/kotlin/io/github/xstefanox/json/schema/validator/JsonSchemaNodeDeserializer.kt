@@ -28,6 +28,7 @@ import io.github.xstefanox.json.schema.validator.node.NumberConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.OneOfJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 
@@ -39,6 +40,8 @@ private const val TYPE_FIELD_NAME = "type"
 private const val ENUM_FIELD_NAME = "enum"
 
 private const val NOT_FIELD_NAME = "not"
+
+private const val ONEOF_FIELD_NAME = "oneOf"
 
 
 class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNode::class.java) {
@@ -90,6 +93,10 @@ class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNod
 
             if (json.has(NOT_FIELD_NAME)) {
                 return objectMapper.convertValue<NotJsonSchemaNode>(json)
+            }
+
+            if (json.has(ONEOF_FIELD_NAME)) {
+                return objectMapper.convertValue<OneOfJsonSchemaNode>(json)
             }
 
             if (json.has(TYPE_FIELD_NAME)) {

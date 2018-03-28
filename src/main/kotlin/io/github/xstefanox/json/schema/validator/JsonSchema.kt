@@ -36,6 +36,7 @@ import io.github.xstefanox.json.schema.validator.node.NumberConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.NumberJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.OneOfJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE
 import io.github.xstefanox.json.schema.validator.node.StringFormat.DATE_TIME
@@ -658,6 +659,29 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
         }
     }
 
+    private fun validate(schema: OneOfJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        val matchedSchema = schema.oneOf.asSequence().count { schema ->
+            validate(schema, json, pointer).isEmpty()
+        }
+
+        if (matchedSchema == 0) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element does not match any of the nested schema"
+            ))
+        }
+
+        if (matchedSchema > 1) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element matches more than one of the nested schema"
+            ))
+        }
+
+        return emptyList()
+    }
+
     private fun validate(schema: JsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
         return when (schema) {
@@ -679,6 +703,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is AlwaysValidatingJsonSchemaNode -> validate(schema, json, pointer)
             is NeverValidatingJsonSchemaNode -> validate(schema, json, pointer)
             is NotJsonSchemaNode -> validate(schema, json, pointer)
+            is OneOfJsonSchemaNode -> validate(schema, json, pointer)
             else -> throw UnsupportedJsonSchemaClassException(schema::class)
         }
     }

@@ -5,4 +5,4 @@ import com.fasterxml.jackson.databind.JsonNode
 /**
  * Thrown when no JSON Schema cannot be deserialized from a JSON string.
  */
-class UnrecognizableJsonSchemaException(json: JsonNode) : RuntimeException("unrecongizable JSON Schema: $json")
+class UnrecognizableJsonSchemaException(json: JsonNode) : RuntimeException("unrecognizable JSON Schema: $json")
