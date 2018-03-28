@@ -496,7 +496,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: NumberConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -517,7 +517,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: BooleanConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -538,7 +538,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: NullConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -552,7 +552,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             )
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: StringConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -573,7 +573,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: ArrayConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -596,7 +596,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: ObjectConstJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -617,7 +617,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: EnumJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
@@ -631,11 +631,11 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             ))
         }
 
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: AlwaysValidatingJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
-        return listOf()
+        return emptyList()
     }
 
     private fun validate(schema: NeverValidatingJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
