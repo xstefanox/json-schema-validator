@@ -20,6 +20,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.convertValue
 import inet.ipaddr.HostName
 import io.github.xstefanox.json.schema.validator.node.AlwaysValidatingJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.AnyOfJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanConstJsonSchemaNode
@@ -661,8 +662,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
     private fun validate(schema: OneOfJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
 
-        val matchedSchema = schema.oneOf.asSequence().count { schema ->
-            validate(schema, json, pointer).isEmpty()
+        val matchedSchema = schema.oneOf.asSequence().count { nestedSchema ->
+            validate(nestedSchema, json, pointer).isEmpty()
         }
 
         if (matchedSchema == 0) {
@@ -676,6 +677,22 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             return listOf(ValidationError(
                     pointer,
                     "element matches more than one of the nested schema"
+            ))
+        }
+
+        return emptyList()
+    }
+
+    private fun validate(schema: AnyOfJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
+
+        val matchedSchema = schema.anyOf.asSequence().count { nestedSchema ->
+            validate(nestedSchema, json, pointer).isEmpty()
+        }
+
+        if (matchedSchema == 0) {
+            return listOf(ValidationError(
+                    pointer,
+                    "element does not match any of the nested schema"
             ))
         }
 
@@ -704,6 +721,7 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             is NeverValidatingJsonSchemaNode -> validate(schema, json, pointer)
             is NotJsonSchemaNode -> validate(schema, json, pointer)
             is OneOfJsonSchemaNode -> validate(schema, json, pointer)
+            is AnyOfJsonSchemaNode -> validate(schema, json, pointer)
             else -> throw UnsupportedJsonSchemaClassException(schema::class)
         }
     }

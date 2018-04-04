@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.convertValue
 import io.github.xstefanox.json.schema.validator.node.AlwaysValidatingJsonSchemaNode
+import io.github.xstefanox.json.schema.validator.node.AnyOfJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.ArrayJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.BooleanConstJsonSchemaNode
@@ -42,6 +43,8 @@ private const val ENUM_FIELD_NAME = "enum"
 private const val NOT_FIELD_NAME = "not"
 
 private const val ONEOF_FIELD_NAME = "oneOf"
+
+private const val ANYOF_FIELD_NAME = "anyOf"
 
 
 class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNode::class.java) {
@@ -97,6 +100,10 @@ class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNod
 
             if (json.has(ONEOF_FIELD_NAME)) {
                 return objectMapper.convertValue<OneOfJsonSchemaNode>(json)
+            }
+
+            if (json.has(ANYOF_FIELD_NAME)) {
+                return objectMapper.convertValue<AnyOfJsonSchemaNode>(json)
             }
 
             if (json.has(TYPE_FIELD_NAME)) {
