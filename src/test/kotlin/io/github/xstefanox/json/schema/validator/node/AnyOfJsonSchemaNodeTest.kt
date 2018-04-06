@@ -27,8 +27,8 @@ internal class AnyOfJsonSchemaNodeTest {
                 "multipleOf" : null,
                 "minimum" : null,
                 "maximum" : null,
-                "exclusiveMinimum" : false,
-                "exclusiveMaximum" : false
+                "exclusiveMinimum" : null,
+                "exclusiveMaximum" : null
               } ]
             }
             """.trimIndent())

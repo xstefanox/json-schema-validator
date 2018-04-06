@@ -16,8 +16,8 @@ data class NumberJsonSchemaNode(
         val multipleOf: Multiplier? = null,
         val minimum: Number? = null,
         val maximum: Number? = null,
-        val exclusiveMinimum: Boolean = false,
-        val exclusiveMaximum: Boolean = false
+        val exclusiveMinimum: Number? = null,
+        val exclusiveMaximum: Number? = null
 ) : JsonSchemaNode() {
 
     init {

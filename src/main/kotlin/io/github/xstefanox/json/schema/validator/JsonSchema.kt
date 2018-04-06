@@ -153,32 +153,32 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             )
         }
 
-        if (schema.minimum != null) {
-            if (schema.exclusiveMinimum && longValue <= schema.minimum) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be greater than ${schema.minimum}"
-                )
-            } else if (longValue < schema.minimum) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be greater than or equal to ${schema.minimum}"
-                )
-            }
+        if (schema.minimum != null && longValue < schema.minimum) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be greater than or equal to ${schema.minimum}"
+            )
         }
 
-        if (schema.maximum != null) {
-            if (schema.exclusiveMaximum && longValue >= schema.maximum) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be less than ${schema.maximum}"
-                )
-            } else if (longValue > schema.maximum) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be less than or equal to ${schema.maximum}"
-                )
-            }
+        if (schema.exclusiveMinimum != null && longValue <= schema.exclusiveMinimum) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be greater than ${schema.exclusiveMinimum}"
+            )
+        }
+
+        if (schema.maximum != null && longValue > schema.maximum) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be less than or equal to ${schema.maximum}"
+            )
+        }
+
+        if (schema.exclusiveMaximum != null && longValue >= schema.exclusiveMaximum) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be less than ${schema.exclusiveMaximum}"
+            )
         }
 
         return errors
@@ -206,32 +206,32 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             )
         }
 
-        if (schema.minimum != null) {
-            if (schema.exclusiveMinimum && doubleValue <= schema.minimum.toDouble()) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be greater than ${schema.minimum}"
-                )
-            } else if (doubleValue < schema.minimum.toDouble()) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be greater than or equal to ${schema.minimum}"
-                )
-            }
+        if (schema.minimum != null && doubleValue < schema.minimum.toDouble()) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be greater than or equal to ${schema.minimum}"
+            )
         }
 
-        if (schema.maximum != null) {
-            if (schema.exclusiveMaximum && doubleValue >= schema.maximum.toDouble()) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be less than ${schema.maximum}"
-                )
-            } else if (doubleValue > schema.maximum.toDouble()) {
-                errors += ValidationError(
-                        pointer,
-                        "element should be less than or equal to ${schema.maximum}"
-                )
-            }
+        if (schema.exclusiveMinimum != null && doubleValue <= schema.exclusiveMinimum.toDouble()) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be greater than ${schema.exclusiveMinimum}"
+            )
+        }
+
+        if (schema.maximum != null && doubleValue > schema.maximum.toDouble()) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be less than or equal to ${schema.maximum}"
+            )
+        }
+
+        if (schema.exclusiveMaximum != null && doubleValue >= schema.exclusiveMaximum.toDouble()) {
+            errors += ValidationError(
+                    pointer,
+                    "element should be less than ${schema.exclusiveMaximum}"
+            )
         }
 
         return errors

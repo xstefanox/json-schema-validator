@@ -120,8 +120,7 @@ internal class NumberNodeTest {
         val jsonSchema = JsonSchemaFactory().from("""
             {
                 "type": "number",
-                "minimum": 3.14,
-                "exclusiveMinimum": true
+                "exclusiveMinimum": 3.14
             }
             """)
 
@@ -185,8 +184,7 @@ internal class NumberNodeTest {
         val jsonSchema = JsonSchemaFactory().from("""
             {
                 "type": "number",
-                "maximum": 3.14,
-                "exclusiveMaximum": true
+                "exclusiveMaximum": 3.14
             }
             """)
 
