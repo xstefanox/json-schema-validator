@@ -118,8 +118,7 @@ internal class IntegerNodeTest {
         val jsonSchema = JsonSchemaFactory().from("""
             {
                 "type": "integer",
-                "minimum": 5,
-                "exclusiveMinimum": true
+                "exclusiveMinimum": 5
             }
             """)
 
@@ -183,8 +182,7 @@ internal class IntegerNodeTest {
         val jsonSchema = JsonSchemaFactory().from("""
             {
                 "type": "integer",
-                "maximum": 5,
-                "exclusiveMaximum": true
+                "exclusiveMaximum": 5
             }
             """)
 
