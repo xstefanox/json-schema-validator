@@ -2,7 +2,6 @@ package io.github.xstefanox.json.schema.validator.node
 
 import TestUtils.Companion.OBJECT_MAPPER
 import io.github.xstefanox.json.schema.validator.model.PositiveInt
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName

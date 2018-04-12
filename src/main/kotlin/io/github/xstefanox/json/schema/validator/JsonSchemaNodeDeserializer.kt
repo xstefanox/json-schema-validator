@@ -32,6 +32,8 @@ import io.github.xstefanox.json.schema.validator.node.ObjectJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.OneOfJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringConstJsonSchemaNode
 import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.memberProperties
 
 
 private const val CONST_FIELD_NAME = "const"
@@ -45,6 +47,14 @@ private const val NOT_FIELD_NAME = "not"
 private const val ONEOF_FIELD_NAME = "oneOf"
 
 private const val ANYOF_FIELD_NAME = "anyOf"
+
+private val OBJECT_SCHEMA_PROPERTIES = ObjectJsonSchemaNode::class.memberProperties.map(KProperty1<ObjectJsonSchemaNode, *>::name).toSet()
+
+private val ARRAY_SCHEMA_PROPERTIES = ArrayJsonSchemaNode::class.memberProperties.map(KProperty1<ArrayJsonSchemaNode, *>::name).toSet()
+
+private val NUMBER_SCHEMA_PROPERTIES = NumberJsonSchemaNode::class.memberProperties.map(KProperty1<NumberJsonSchemaNode, *>::name).toSet()
+
+private val STRING_SCHEMA_PROPERTIES = StringJsonSchemaNode::class.memberProperties.map(KProperty1<StringJsonSchemaNode, *>::name).toSet()
 
 
 class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNode::class.java) {
@@ -120,6 +130,25 @@ class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNod
                     "array" -> objectMapper.convertValue<ArrayJsonSchemaNode>(json)
                     else -> throw UnsupportedJsonSchemaTypeException(type)
                 }
+            }
+
+            val jsonProperties = mutableSetOf<String>()
+            json.fieldNames().forEach { jsonProperties.add(it) }
+
+            if (OBJECT_SCHEMA_PROPERTIES.containsAll(jsonProperties)) {
+                return objectMapper.convertValue<ObjectJsonSchemaNode>(json)
+            }
+
+            if (ARRAY_SCHEMA_PROPERTIES.containsAll(jsonProperties)) {
+                return objectMapper.convertValue<ArrayJsonSchemaNode>(json)
+            }
+
+            if (NUMBER_SCHEMA_PROPERTIES.containsAll(jsonProperties)) {
+                return objectMapper.convertValue<NumberJsonSchemaNode>(json)
+            }
+
+            if (STRING_SCHEMA_PROPERTIES.containsAll(jsonProperties)) {
+                return objectMapper.convertValue<StringJsonSchemaNode>(json)
             }
         }
 
