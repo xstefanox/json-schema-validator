@@ -11,7 +11,7 @@ internal class BooleanJsonSchemaNodeTest {
     @Test
     @DisplayName("boolean JSON Schema node must be serialized")
     internal fun test1() {
-        assertThat(OBJECT_MAPPER.writeValueAsString(BooleanJsonSchemaNode())).isEqualTo("""
+        assertThat(OBJECT_MAPPER.writeValueAsString(BooleanJsonSchemaNode)).isEqualTo("""
             {
               "type" : "boolean"
             }
@@ -25,12 +25,12 @@ internal class BooleanJsonSchemaNodeTest {
             {
               "type" : "boolean"
             }
-            """)).isEqualTo(BooleanJsonSchemaNode())
+            """)).isEqualTo(BooleanJsonSchemaNode)
     }
 
     @Test
     @DisplayName("boolean JSON Schema nodes should always be equal")
     internal fun test3() {
-        assertThat(BooleanJsonSchemaNode()).isEqualTo(BooleanJsonSchemaNode())
+        assertThat(BooleanJsonSchemaNode).isEqualTo(BooleanJsonSchemaNode)
     }
 }

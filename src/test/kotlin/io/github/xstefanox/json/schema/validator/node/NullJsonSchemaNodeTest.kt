@@ -11,7 +11,7 @@ internal class NullJsonSchemaNodeTest {
     @Test
     @DisplayName("null JSON Schema node must be serialized")
     internal fun test1() {
-        assertThat(OBJECT_MAPPER.writeValueAsString(NullJsonSchemaNode())).isEqualTo("""
+        assertThat(OBJECT_MAPPER.writeValueAsString(NullJsonSchemaNode)).isEqualTo("""
             {
               "type" : "null"
             }
@@ -25,12 +25,12 @@ internal class NullJsonSchemaNodeTest {
             {
               "type" : "null"
             }
-            """)).isEqualTo(NullJsonSchemaNode())
+            """)).isEqualTo(NullJsonSchemaNode)
     }
 
     @Test
     @DisplayName("null JSON Schema nodes should always be equal")
     internal fun test3() {
-        assertThat(NullJsonSchemaNode()).isEqualTo(NullJsonSchemaNode())
+        assertThat(NullJsonSchemaNode).isEqualTo(NullJsonSchemaNode)
     }
 }

@@ -11,7 +11,7 @@ internal class NotJsonSchemaNodeTest {
     @Test
     @DisplayName("not JSON Schema node must be serialized")
     internal fun test1() {
-        assertThat(OBJECT_MAPPER.writeValueAsString(NotJsonSchemaNode(BooleanJsonSchemaNode()))).isEqualTo("""
+        assertThat(OBJECT_MAPPER.writeValueAsString(NotJsonSchemaNode(BooleanJsonSchemaNode))).isEqualTo("""
             {
               "not" : {
                 "type" : "boolean"
@@ -29,6 +29,6 @@ internal class NotJsonSchemaNodeTest {
                   "type" : "boolean"
                 }
             }
-            """)).isEqualTo(NotJsonSchemaNode(BooleanJsonSchemaNode()))
+            """)).isEqualTo(NotJsonSchemaNode(BooleanJsonSchemaNode))
     }
 }

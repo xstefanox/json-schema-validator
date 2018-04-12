@@ -11,22 +11,4 @@ import io.github.xstefanox.json.schema.validator.TypePropertyWriter
             JsonAppend.Prop(name = "type", value = TypePropertyWriter::class)
         ]
 )
-class BooleanJsonSchemaNode : JsonSchemaNode() {
-
-    override fun equals(other: Any?): Boolean {
-
-        if (this === other) {
-            return true
-        }
-
-        if (javaClass != other?.javaClass) {
-            return false
-        }
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
-}
+object BooleanJsonSchemaNode : JsonSchemaNode()

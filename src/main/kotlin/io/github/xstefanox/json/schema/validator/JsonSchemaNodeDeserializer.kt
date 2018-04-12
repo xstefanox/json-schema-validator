@@ -124,8 +124,8 @@ class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNod
                     "integer" -> objectMapper.convertValue<IntegerJsonSchemaNode>(json)
                     "number" -> objectMapper.convertValue<NumberJsonSchemaNode>(json)
                     "string" -> objectMapper.convertValue<StringJsonSchemaNode>(json)
-                    "boolean" -> objectMapper.convertValue<BooleanJsonSchemaNode>(json)
-                    "null" -> objectMapper.convertValue<NullJsonSchemaNode>(json)
+                    "boolean" -> BooleanJsonSchemaNode
+                    "null" -> NullJsonSchemaNode
                     "object" -> objectMapper.convertValue<ObjectJsonSchemaNode>(json)
                     "array" -> objectMapper.convertValue<ArrayJsonSchemaNode>(json)
                     else -> throw UnsupportedJsonSchemaTypeException(type)

@@ -14,7 +14,7 @@ internal class AnyOfJsonSchemaNodeTest {
     internal fun test1() {
 
         val jsonSchema = AnyOfJsonSchemaNode(listOf(
-                BooleanJsonSchemaNode(),
+                BooleanJsonSchemaNode,
                 IntegerJsonSchemaNode()
         ))
 
@@ -39,7 +39,7 @@ internal class AnyOfJsonSchemaNodeTest {
     internal fun test2() {
 
         val jsonSchema = AnyOfJsonSchemaNode(listOf(
-                NullJsonSchemaNode(),
+                NullJsonSchemaNode,
                 NumberJsonSchemaNode()
         ))
 
