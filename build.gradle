@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlinVersion = '1.2.31'
+    ext.kotlinVersion = '1.2.41'
     ext.junitVersion = '5.1.0'
     ext.jacksonVersion = '2.9.4'
     ext.javaMailVersion = '1.6.1'
@@ -8,23 +8,14 @@ buildscript {
         mavenCentral()
     }
 
-    configurations.maybeCreate("pitest")
-
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
-        pitest 'org.pitest:pitest-junit5-plugin:0.4'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.2.0'
     }
 }
 
 plugins {
-    id 'info.solidsoft.pitest' version '1.3.0'
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-3"
-}
-
-pitest {
-    testPlugin = "junit5"
-    pitestVersion = '1.3.2'
 }
 
 group 'io.github.xstefanox'
@@ -47,14 +38,14 @@ dependencies {
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     compile "javax.mail:javax.mail-api:$javaMailVersion"
     compile "com.sun.mail:javax.mail:$javaMailVersion"
-    compile 'com.github.seancfoley:ipaddress:4.1.0'
+    compile 'com.github.seancfoley:ipaddress:4.2.0'
 
-    testRuntime "org.junit.platform:junit-platform-launcher:1.1.0"
+    testRuntime "org.junit.platform:junit-platform-launcher:1.2.0"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
     testCompile "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testCompile 'org.assertj:assertj-core:3.9.1'
-    testCompile 'org.mockito:mockito-core:2.15.0'
+    testCompile 'org.mockito:mockito-core:2.18.3'
 }
 
 compileKotlin {
