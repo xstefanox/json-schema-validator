@@ -33,20 +33,20 @@ test {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
-    compile "javax.mail:javax.mail-api:$javaMailVersion"
-    compile "com.sun.mail:javax.mail:$javaMailVersion"
-    compile 'com.github.seancfoley:ipaddress:4.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    implementation "javax.mail:javax.mail-api:$javaMailVersion"
+    implementation "com.sun.mail:javax.mail:$javaMailVersion"
+    implementation 'com.github.seancfoley:ipaddress:4.2.0'
 
-    testRuntime "org.junit.platform:junit-platform-launcher:1.2.0"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
-    testCompile "org.junit.jupiter:junit-jupiter-params:$junitVersion"
-    testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
-    testCompile 'org.assertj:assertj-core:3.9.1'
-    testCompile 'org.mockito:mockito-core:2.18.3'
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.2.0"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation 'org.assertj:assertj-core:3.9.1'
+    testImplementation 'org.mockito:mockito-core:2.18.3'
 
     ktlint "com.github.shyiko:ktlint:0.23.0"
 }
@@ -64,9 +64,6 @@ task ktlint(type: JavaExec, group: "verification") {
     main = "com.github.shyiko.ktlint.Main"
     classpath = configurations.ktlint
     args "src/**/*.kt"
-    // to generate report in checkstyle format prepend following args:
-    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
-    // see https://github.com/shyiko/ktlint#usage for more
 }
 
 check.dependsOn ktlint
