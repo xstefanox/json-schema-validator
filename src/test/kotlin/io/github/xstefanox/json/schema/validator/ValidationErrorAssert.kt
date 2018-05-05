@@ -3,7 +3,6 @@ package io.github.xstefanox.json.schema.validator
 import com.fasterxml.jackson.core.JsonPointer
 import org.assertj.core.api.AbstractAssert
 
-
 open class ValidationErrorAssert(validationError: ValidationError) : AbstractAssert<ValidationErrorAssert, ValidationError>(validationError, ValidationErrorAssert::class.java) {
 
     open fun pointsTo(jsonPointer: String): ValidationErrorAssert {

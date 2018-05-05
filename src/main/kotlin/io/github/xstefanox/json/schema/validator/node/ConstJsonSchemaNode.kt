@@ -3,7 +3,6 @@ package io.github.xstefanox.json.schema.validator.node
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-
 abstract class ConstJsonSchemaNode : JsonSchemaNode()
 
 data class StringConstJsonSchemaNode(val const: String) : ConstJsonSchemaNode()

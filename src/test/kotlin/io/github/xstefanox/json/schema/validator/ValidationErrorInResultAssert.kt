@@ -1,9 +1,8 @@
 package io.github.xstefanox.json.schema.validator
 
-
 class ValidationErrorInResultAssert(
-        validationError: ValidationError,
-        val validationResult: ValidationResult
+    validationError: ValidationError,
+    val validationResult: ValidationResult
 ) : ValidationErrorAssert(validationError) {
 
     fun at(index: Int): ValidationErrorInResultAssert {

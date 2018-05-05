@@ -23,7 +23,7 @@ data class PositiveInt(private val value: Int) : Comparable<PositiveInt> {
     }
 
     @JsonValue
-    fun toJson() : Int {
+    fun toJson(): Int {
         return value
     }
 }

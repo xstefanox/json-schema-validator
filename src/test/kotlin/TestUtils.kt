@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.github.xstefanox.json.schema.validator.JsonSchemaNodeDeserializer
 import io.github.xstefanox.json.schema.validator.node.JsonSchemaNode
 
-
 class TestUtils {
 
     companion object {

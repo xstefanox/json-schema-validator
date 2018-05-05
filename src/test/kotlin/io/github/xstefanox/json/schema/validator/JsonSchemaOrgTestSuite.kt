@@ -12,12 +12,10 @@ import java.nio.file.Paths
 import java.util.stream.Stream
 import kotlin.streams.asStream
 
-
 private val SCHEMA_ORG_TEST_SUITE_DIR = Paths.get(
-        System.getProperty("user.dir"),
-        "/submodules/json-schema-org-test-suite/tests/draft7"
+    System.getProperty("user.dir"),
+    "/submodules/json-schema-org-test-suite/tests/draft7"
 )
-
 
 internal class JsonSchemaOrgTestSuite {
 
@@ -35,9 +33,8 @@ internal class JsonSchemaOrgTestSuite {
                 val validationResult = schema.validate(testAssertion.data)
 
                 softly.assertThat(validationResult.isSuccessful)
-                        .describedAs(testAssertion.description)
-                        .isEqualTo(testAssertion.valid)
-
+                    .describedAs(testAssertion.description)
+                    .isEqualTo(testAssertion.valid)
             }
         }
     }
@@ -48,17 +45,17 @@ internal class JsonSchemaOrgTestSuite {
         @Suppress("unused")
         private fun getTests(): Stream<JsonSchemaOrgTestFile> {
             return SCHEMA_ORG_TEST_SUITE_DIR
-                    .toFile()
-                    .walk()
-                    .filterNot(File::isDirectory)
-                    .flatMap { file ->
-                        OBJECT_MAPPER.readValue<List<JsonSchemaOrgTest>>(file)
-                                .asSequence()
-                                .map { test ->
-                                    JsonSchemaOrgTestFile(test, file)
-                                }
-                    }
-                    .asStream()
+                .toFile()
+                .walk()
+                .filterNot(File::isDirectory)
+                .flatMap { file ->
+                    OBJECT_MAPPER.readValue<List<JsonSchemaOrgTest>>(file)
+                        .asSequence()
+                        .map { test ->
+                            JsonSchemaOrgTestFile(test, file)
+                        }
+                }
+                .asStream()
         }
     }
 
@@ -67,8 +64,8 @@ internal class JsonSchemaOrgTestSuite {
     internal data class TestAssertion(val description: String, val data: JsonNode, val valid: Boolean)
 
     internal data class JsonSchemaOrgTestFile(
-            val test: JsonSchemaOrgTest,
-            private val file: File
+        val test: JsonSchemaOrgTest,
+        private val file: File
     ) {
 
         override fun toString(): String {

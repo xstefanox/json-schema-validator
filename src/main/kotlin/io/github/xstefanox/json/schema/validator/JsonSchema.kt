@@ -53,53 +53,46 @@ import java.time.format.DateTimeParseException
 import javax.mail.internet.AddressException
 import javax.mail.internet.InternetAddress
 
-
 /**
  * The [Set] of [com.fasterxml.jackson.databind.node.NumericNode]s that can contain integer values.
  */
 val INTEGER_NODE_CLASSES = setOf(
-        IntNode::class,
-        BigIntegerNode::class,
-        ShortNode::class,
-        LongNode::class
+    IntNode::class,
+    BigIntegerNode::class,
+    ShortNode::class,
+    LongNode::class
 )
-
 
 /**
  * The [Set] of [com.fasterxml.jackson.databind.node.NumericNode]s that can contain floating point values.
  */
 val NUMBER_NODE_CLASSES = setOf(
-        DoubleNode::class,
-        FloatNode::class,
-        DecimalNode::class
+    DoubleNode::class,
+    FloatNode::class,
+    DecimalNode::class
 )
 
-
 private val ROOT_POINTER = JsonPointer.compile("/")
-
 
 private fun JsonPointer.append(tail: String): JsonPointer {
     return append(JsonPointer.valueOf("/$tail"))
 }
 
-
 private fun JsonPointer.append(tail: Int): JsonPointer {
     return append(tail.toString())
 }
 
-
 private fun JsonPointer.append(tail: ObjectJsonSchemaNode.Property): JsonPointer {
     return append(tail.toString())
 }
-
 
 class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
     private val objectMapper: ObjectMapper by lazy {
 
         ObjectMapper()
-                .configure(SerializationFeature.INDENT_OUTPUT, true)
-                .registerModule(KotlinModule())
+            .configure(SerializationFeature.INDENT_OUTPUT, true)
+            .registerModule(KotlinModule())
     }
 
     companion object {
@@ -121,10 +114,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is BooleanNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be a boolean"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be a boolean"
+                )
             )
         }
 
@@ -135,10 +128,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json::class !in INTEGER_NODE_CLASSES) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be an integer"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be an integer"
+                )
             )
         }
 
@@ -148,36 +141,36 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (schema.multipleOf != null && !schema.multipleOf.divides(longValue)) {
             errors += ValidationError(
-                    pointer,
-                    "element should be a multiple of ${schema.multipleOf}"
+                pointer,
+                "element should be a multiple of ${schema.multipleOf}"
             )
         }
 
         if (schema.minimum != null && longValue < schema.minimum) {
             errors += ValidationError(
-                    pointer,
-                    "element should be greater than or equal to ${schema.minimum}"
+                pointer,
+                "element should be greater than or equal to ${schema.minimum}"
             )
         }
 
         if (schema.exclusiveMinimum != null && longValue <= schema.exclusiveMinimum) {
             errors += ValidationError(
-                    pointer,
-                    "element should be greater than ${schema.exclusiveMinimum}"
+                pointer,
+                "element should be greater than ${schema.exclusiveMinimum}"
             )
         }
 
         if (schema.maximum != null && longValue > schema.maximum) {
             errors += ValidationError(
-                    pointer,
-                    "element should be less than or equal to ${schema.maximum}"
+                pointer,
+                "element should be less than or equal to ${schema.maximum}"
             )
         }
 
         if (schema.exclusiveMaximum != null && longValue >= schema.exclusiveMaximum) {
             errors += ValidationError(
-                    pointer,
-                    "element should be less than ${schema.exclusiveMaximum}"
+                pointer,
+                "element should be less than ${schema.exclusiveMaximum}"
             )
         }
 
@@ -188,10 +181,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json::class !in NUMBER_NODE_CLASSES) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be a number"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be a number"
+                )
             )
         }
 
@@ -201,36 +194,36 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (schema.multipleOf != null && !schema.multipleOf.divides(doubleValue)) {
             errors += ValidationError(
-                    pointer,
-                    "element should be a multiple of ${schema.multipleOf}"
+                pointer,
+                "element should be a multiple of ${schema.multipleOf}"
             )
         }
 
         if (schema.minimum != null && doubleValue < schema.minimum.toDouble()) {
             errors += ValidationError(
-                    pointer,
-                    "element should be greater than or equal to ${schema.minimum}"
+                pointer,
+                "element should be greater than or equal to ${schema.minimum}"
             )
         }
 
         if (schema.exclusiveMinimum != null && doubleValue <= schema.exclusiveMinimum.toDouble()) {
             errors += ValidationError(
-                    pointer,
-                    "element should be greater than ${schema.exclusiveMinimum}"
+                pointer,
+                "element should be greater than ${schema.exclusiveMinimum}"
             )
         }
 
         if (schema.maximum != null && doubleValue > schema.maximum.toDouble()) {
             errors += ValidationError(
-                    pointer,
-                    "element should be less than or equal to ${schema.maximum}"
+                pointer,
+                "element should be less than or equal to ${schema.maximum}"
             )
         }
 
         if (schema.exclusiveMaximum != null && doubleValue >= schema.exclusiveMaximum.toDouble()) {
             errors += ValidationError(
-                    pointer,
-                    "element should be less than ${schema.exclusiveMaximum}"
+                pointer,
+                "element should be less than ${schema.exclusiveMaximum}"
             )
         }
 
@@ -241,10 +234,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is NullNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be null"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be null"
+                )
             )
         }
 
@@ -255,10 +248,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is TextNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be a string"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be a string"
+                )
             )
         }
 
@@ -268,23 +261,23 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (schema.minLength > textValue.length) {
             errors +=
-                    ValidationError(
-                            pointer,
-                            "string should be at least ${schema.minLength} characters long"
-                    )
+                ValidationError(
+                    pointer,
+                    "string should be at least ${schema.minLength} characters long"
+                )
         }
 
         if (schema.maxLength != null && schema.maxLength < textValue.length) {
             errors += ValidationError(
-                    pointer,
-                    "string should be at most ${schema.maxLength} characters long"
+                pointer,
+                "string should be at most ${schema.maxLength} characters long"
             )
         }
 
         if (schema.pattern != null && !schema.pattern.matches(textValue)) {
             errors += ValidationError(
-                    pointer,
-                    "element does not match pattern"
+                pointer,
+                "element does not match pattern"
             )
         }
 
@@ -295,8 +288,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         ISO_OFFSET_DATE.parse(textValue)
                     } catch (e: DateTimeParseException) {
                         errors += ValidationError(
-                                pointer,
-                                "element should be a date"
+                            pointer,
+                            "element should be a date"
                         )
                     }
                 }
@@ -305,8 +298,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         ISO_OFFSET_TIME.parse(textValue)
                     } catch (e: DateTimeParseException) {
                         errors += ValidationError(
-                                pointer,
-                                "element should be a time"
+                            pointer,
+                            "element should be a time"
                         )
                     }
                 }
@@ -315,8 +308,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         ISO_OFFSET_DATE_TIME.parse(textValue)
                     } catch (e: DateTimeParseException) {
                         errors += ValidationError(
-                                pointer,
-                                "element should be a date-time"
+                            pointer,
+                            "element should be a date-time"
                         )
                     }
                 }
@@ -325,16 +318,16 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
                         InternetAddress(textValue)
                     } catch (e: AddressException) {
                         errors += ValidationError(
-                                pointer,
-                                "element should be an email address"
+                            pointer,
+                            "element should be an email address"
                         )
                     }
                 }
                 HOSTNAME -> {
                     if (!HostName(textValue).isValid) {
                         errors += ValidationError(
-                                pointer,
-                                "element should be a host name"
+                            pointer,
+                            "element should be a host name"
                         )
                     }
                 }
@@ -349,10 +342,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is ArrayNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be an array"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be an array"
+                )
             )
         }
 
@@ -360,15 +353,15 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (schema.minItems > json.size()) {
             errors += ValidationError(
-                    pointer,
-                    "expected at least ${schema.minItems} items"
+                pointer,
+                "expected at least ${schema.minItems} items"
             )
         }
 
         if (schema.maxItems != null && schema.maxItems < json.size()) {
             errors += ValidationError(
-                    pointer,
-                    "expected at most ${schema.maxItems} items"
+                pointer,
+                "expected at most ${schema.maxItems} items"
             )
         }
 
@@ -382,8 +375,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
                 if (!added) {
                     errors += ValidationError(
-                            pointer.append(index),
-                            "duplicated element"
+                        pointer.append(index),
+                        "duplicated element"
                     )
                 }
             }
@@ -402,8 +395,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
             if (validItems.isEmpty()) {
                 return listOf(ValidationError(
-                        pointer,
-                        """no item matching "contains" schema found"""
+                    pointer,
+                    """no item matching "contains" schema found"""
                 ))
             }
         }
@@ -415,19 +408,19 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is ObjectNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be an object"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be an object"
+                )
             )
         }
 
         val errors = mutableListOf<ValidationError>()
 
         val jsonPropertyNames = json.fieldNames()
-                .asSequence()
-                .map { ObjectJsonSchemaNode.Property(it) }
-                .toSet()
+            .asSequence()
+            .map { ObjectJsonSchemaNode.Property(it) }
+            .toSet()
 
         if (schema.properties != null) {
 
@@ -444,37 +437,37 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             if (!schema.additionalProperties) {
 
                 jsonPropertyNames
-                        .filter { it !in schema.properties.keys }
-                        .forEach { property ->
-                            errors += ValidationError(
-                                    pointer.append(property),
-                                    "additional properties not allowed")
-                        }
+                    .filter { it !in schema.properties.keys }
+                    .forEach { property ->
+                        errors += ValidationError(
+                            pointer.append(property),
+                            "additional properties not allowed")
+                    }
             }
         }
 
         if (schema.minProperties > jsonPropertyNames.size) {
             errors += ValidationError(
-                    pointer,
-                    "element should have at least ${schema.minProperties} properties"
+                pointer,
+                "element should have at least ${schema.minProperties} properties"
             )
         }
 
         if (schema.maxProperties != null && schema.maxProperties < jsonPropertyNames.size) {
             errors += ValidationError(
-                    pointer,
-                    "element should have at most ${schema.maxProperties} properties"
+                pointer,
+                "element should have at most ${schema.maxProperties} properties"
             )
         }
 
         schema.required
-                .filter { it !in jsonPropertyNames }
-                .forEach { property ->
-                    errors += ValidationError(
-                            pointer.append(property),
-                            "property is missing"
-                    )
-                }
+            .filter { it !in jsonPropertyNames }
+            .forEach { property ->
+                errors += ValidationError(
+                    pointer.append(property),
+                    "property is missing"
+                )
+            }
 
         return errors
     }
@@ -483,17 +476,17 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json::class !in INTEGER_NODE_CLASSES) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be an integer"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be an integer"
+                )
             )
         }
 
         if (json.asLong() != schema.const.toLong()) {
             return listOf(ValidationError(
-                    pointer,
-                    "element should be equal to ${schema.const}"
+                pointer,
+                "element should be equal to ${schema.const}"
             ))
         }
 
@@ -504,17 +497,17 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json::class !in NUMBER_NODE_CLASSES) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be a number"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be a number"
+                )
             )
         }
 
         if (json.asLong() != schema.const.toLong()) {
             return listOf(ValidationError(
-                    pointer,
-                    "element should be equal to ${schema.const}"
+                pointer,
+                "element should be equal to ${schema.const}"
             ))
         }
 
@@ -525,17 +518,17 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is BooleanNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be a boolean"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be a boolean"
+                )
             )
         }
 
         if (json.asBoolean() != schema.const) {
             return listOf(ValidationError(
-                    pointer,
-                    "element should be equal to ${schema.const}"
+                pointer,
+                "element should be equal to ${schema.const}"
             ))
         }
 
@@ -546,10 +539,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is NullNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be null"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be null"
+                )
             )
         }
 
@@ -560,17 +553,17 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is TextNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be a string"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be a string"
+                )
             )
         }
 
         if (json.asText() != schema.const) {
             return listOf(ValidationError(
-                    pointer,
-                    "element should be equal to ${schema.const}"
+                pointer,
+                "element should be equal to ${schema.const}"
             ))
         }
 
@@ -581,10 +574,10 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is ArrayNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be an array"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be an array"
+                )
             )
         }
 
@@ -592,8 +585,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (values != schema.const) {
             return listOf(ValidationError(
-                    pointer,
-                    "element should be equal to ${schema.const}"
+                pointer,
+                "element should be equal to ${schema.const}"
             ))
         }
 
@@ -604,17 +597,17 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !is ObjectNode) {
             return listOf(
-                    ValidationError(
-                            pointer,
-                            "element should be an object"
-                    )
+                ValidationError(
+                    pointer,
+                    "element should be an object"
+                )
             )
         }
 
         if (json != schema.const) {
             return listOf(ValidationError(
-                    pointer,
-                    "element should be equal to ${schema.const}"
+                pointer,
+                "element should be equal to ${schema.const}"
             ))
         }
 
@@ -627,8 +620,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (json !in values) {
             return listOf(ValidationError(
-                    pointer,
-                    "element not found in enum"
+                pointer,
+                "element not found in enum"
             ))
         }
 
@@ -641,8 +634,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
     private fun validate(schema: NeverValidatingJsonSchemaNode, json: JsonNode, pointer: JsonPointer): List<ValidationError> {
         return listOf(ValidationError(
-                pointer,
-                "element is not valid"
+            pointer,
+            "element is not valid"
         ))
     }
 
@@ -654,8 +647,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
             emptyList()
         } else {
             listOf(ValidationError(
-                    pointer,
-                    "element should not be valid"
+                pointer,
+                "element should not be valid"
             ))
         }
     }
@@ -668,15 +661,15 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (matchedSchema == 0) {
             return listOf(ValidationError(
-                    pointer,
-                    "element does not match any of the nested schema"
+                pointer,
+                "element does not match any of the nested schema"
             ))
         }
 
         if (matchedSchema > 1) {
             return listOf(ValidationError(
-                    pointer,
-                    "element matches more than one of the nested schema"
+                pointer,
+                "element matches more than one of the nested schema"
             ))
         }
 
@@ -691,8 +684,8 @@ class JsonSchema(private val root: JsonSchemaNode, val schema: URI) {
 
         if (matchedSchema == 0) {
             return listOf(ValidationError(
-                    pointer,
-                    "element does not match any of the nested schema"
+                pointer,
+                "element does not match any of the nested schema"
             ))
         }
 

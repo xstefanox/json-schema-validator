@@ -35,7 +35,6 @@ import io.github.xstefanox.json.schema.validator.node.StringJsonSchemaNode
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
-
 private const val CONST_FIELD_NAME = "const"
 
 private const val TYPE_FIELD_NAME = "type"
@@ -55,7 +54,6 @@ private val ARRAY_SCHEMA_PROPERTIES = ArrayJsonSchemaNode::class.memberPropertie
 private val NUMBER_SCHEMA_PROPERTIES = NumberJsonSchemaNode::class.memberProperties.map(KProperty1<NumberJsonSchemaNode, *>::name).toSet()
 
 private val STRING_SCHEMA_PROPERTIES = StringJsonSchemaNode::class.memberProperties.map(KProperty1<StringJsonSchemaNode, *>::name).toSet()
-
 
 class JsonSchemaNodeDeserializer : StdDeserializer<JsonSchemaNode>(JsonSchemaNode::class.java) {
 

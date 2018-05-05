@@ -2,12 +2,11 @@ package io.github.xstefanox.json.schema.validator
 
 import org.assertj.core.api.AbstractListAssert
 
-
 class ValidationResultAssert(
-        validationResult: ValidationResult
+    validationResult: ValidationResult
 ) : AbstractListAssert<ValidationResultAssert, ValidationResult, ValidationError, ValidationErrorAssert>(
-        validationResult,
-        ValidationResultAssert::class.java
+    validationResult,
+    ValidationResultAssert::class.java
 ) {
 
     override fun toAssert(value: ValidationError?, description: String?): ValidationErrorAssert {
@@ -24,8 +23,8 @@ class ValidationResultAssert(
         if (!actual.isSuccessful) {
 
             val errorMessages = actual
-                    .map(ValidationError::message)
-                    .joinToString("\n")
+                .map(ValidationError::message)
+                .joinToString("\n")
 
             failWithMessage("expected validation to be successful, found ${actual.size} errors:\n$errorMessages")
         }

@@ -7,17 +7,17 @@ import io.github.xstefanox.json.schema.validator.model.PositiveInt
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAppend(
-        prepend = true,
-        props = [
-            JsonAppend.Prop(name = "type", value = TypePropertyWriter::class)
-        ]
+    prepend = true,
+    props = [
+        JsonAppend.Prop(name = "type", value = TypePropertyWriter::class)
+    ]
 )
 data class ArrayJsonSchemaNode(
-        val items: JsonSchemaNode? = null,
-        val minItems: PositiveInt = PositiveInt(0),
-        val maxItems: PositiveInt? = null,
-        val uniqueItems: Boolean = false,
-        val contains: JsonSchemaNode? = null
+    val items: JsonSchemaNode? = null,
+    val minItems: PositiveInt = PositiveInt(0),
+    val maxItems: PositiveInt? = null,
+    val uniqueItems: Boolean = false,
+    val contains: JsonSchemaNode? = null
 ) : JsonSchemaNode() {
 
     init {

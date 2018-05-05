@@ -7,17 +7,17 @@ import io.github.xstefanox.json.schema.validator.model.Multiplier
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAppend(
-        prepend = true,
-        props = [
-            JsonAppend.Prop(name = "type", value = TypePropertyWriter::class)
-        ]
+    prepend = true,
+    props = [
+        JsonAppend.Prop(name = "type", value = TypePropertyWriter::class)
+    ]
 )
 data class IntegerJsonSchemaNode(
-        val multipleOf: Multiplier? = null,
-        val minimum: Int? = null,
-        val maximum: Int? = null,
-        val exclusiveMinimum: Int? = null,
-        val exclusiveMaximum: Int? = null
+    val multipleOf: Multiplier? = null,
+    val minimum: Int? = null,
+    val maximum: Int? = null,
+    val exclusiveMinimum: Int? = null,
+    val exclusiveMaximum: Int? = null
 ) : JsonSchemaNode() {
 
     init {
